@@ -96,6 +96,8 @@ class App(ctk.CTk):
         self.switch_inverteCores = ctk.CTkSwitch(
             master=self,
             text="Inverte cores?",
+            onvalue="True",
+            offvalue="False"
         )
         self.switch_inverteCores.place(x=21, y=360)
 
@@ -121,6 +123,7 @@ class App(ctk.CTk):
             command=self.save_file
         )
         self.button_salvar.place(x=211, y=430)
+        self.button_salvar.configure(state="disabled")
 
         # Text Box
         self.textbox = ctk.CTkTextbox(
@@ -167,7 +170,9 @@ class App(ctk.CTk):
                 self.entry_pathFile.insert(0, self.caminho_imagem)
                 self.entry_pathFile.configure(state="disabled")
                 self.button_converte.configure(state="normal")
+                self.button_salvar.configure(state="normal")
                 print("Imagem selecionada:", self.caminho_imagem)
+                print(self.switch_inverteCores.get())
                 return self.caminho_imagem
         except Exception as error:
             print("Erro ao selecionar a imagem: ", error)
@@ -175,7 +180,7 @@ class App(ctk.CTk):
     def text_insert(self):
         try:
             if self.caminho_imagem:
-                ascii_text = ascii_img(self.caminho_imagem, self.comboBox_caracteres.get())
+                ascii_text = ascii_img(self.caminho_imagem, self.comboBox_caracteres.get(), self.switch_inverteCores.get())
                 self.textbox.configure(state="normal")
                 self.textbox.delete("0.0", "end")
                 self.textbox.insert("0.0", ascii_text)
@@ -189,16 +194,22 @@ class App(ctk.CTk):
         try:
             conteudo = self.textbox.get("0.0", "end").strip()
             if conteudo:
+                extensao = self.comboBox_extensao.get()
+                tipos_arquivo = [("Arquivos ASCII", f"*{extensao}")]
+
                 file_path = filedialog.asksaveasfilename(
-                    defaultextension=self.comboBox_extensao.get(),
-                    filetypes=[("Arquivos ASCII", "*.txt *.asc")]
+                    defaultextension=extensao,
+                    filetypes=tipos_arquivo,
                 )
+
                 if file_path:
                     with open(file_path, "w", encoding="utf-8") as file:
                         file.write(conteudo)
                         print(f"Arquivo salvo com sucesso em {file_path}")
                 else:
                     print("Salvamento cancelado")
+            else:
+                print("O arquivo não foi convertido")
 
         except Exception as error:
             print("Erro ao salvar o arquivo: ", error)
