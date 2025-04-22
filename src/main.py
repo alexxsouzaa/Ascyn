@@ -1,6 +1,9 @@
 import customtkinter as ctk
 from tkinter import Tk, filedialog
 from tools.image_convert import ascii_img
+from PIL import Image, ImageTk
+from io import BytesIO
+import base64
 
 
 class App(ctk.CTk):
@@ -12,8 +15,18 @@ class App(ctk.CTk):
 
         self.title("Ascyn - ASCII Art")
         self.geometry("900x500+230+100")
+        self.overrideredirect(False)
         self._apply_appearance_mode("dark")
         self.resizable(False, False)
+
+        # Ícone da janela (em base64)
+        icon_data = ("""iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFoSURBVHgBtVW7cYQwEN05R5fRwdEBlEAHlGAInakDKIES6MB0AB1A6ExQAZCRyfs0IGMPkvHdeWeeZiUNb99+AKIv8xiC8c6QjJGhHMB9y6gZCR2YvxKpByBXHmOPEu6JkbGWrp4IceHllRzm+z7VdU3jOJJSitq2pTAMXY9EWFpbVCZUUkolhFCe5+mzPM8VBzB7SwnsXS7LUpP8PAcpq3VNxTEhlMCgFvsoilSSJHq/P7fg+AIkXD/jQx1UF0WhScndrOML1LFpGu1XVaX38KF2C2bDhRxd77pO+7fbzfg4H4aBXGYlDYKA+r7XPkZomibjbwH+TMqNMg+DkOtKnDrFcXw/KRRtStM0NQMP/zdS2OGcotvoOp17Nb/N6Qsvb7R+BPZ2vV4pyzKa51nvl2XROGEfWCpbVIwPp6q4DNo/qbQBqbgjRRcSWlOXTyKU+zr49A9f/s2StSaYmTP/qH7tiaBdsz8BR3uR6SFJ2xsAAAAASUVORK5CYII=""")
+
+        image_stream = BytesIO(base64.b64decode(icon_data))
+        icon_image = Image.open(image_stream)
+        tk_icon = ImageTk.PhotoImage(icon_image)
+        self.iconphoto(False, tk_icon)
+
 
         # Frame de seleção de arquivos
         self.frame_file = ctk.CTkFrame(
@@ -163,7 +176,7 @@ class App(ctk.CTk):
             font=("Courier New", 12)
         )
         self.textbox.place(x=372, y=0)
-        self.textbox.configure(state="disabled", wrap="none")
+        self.text_demo()
 
         self.frame_feedback = ctk.CTkFrame(
             master=self,
@@ -305,6 +318,37 @@ class App(ctk.CTk):
                 self.show_feedback("Nenhum conteúdo para copiar.", "#FE696B", "#000000")
         except:
             self.show_feedback("Erro ao copiar o texto!", "#FE696B", "#ffffff")
+
+    def text_demo(self):
+        self.textbox.configure(state="normal")  # Ativa a edição de texto do TextBox
+        self.textbox.delete("0.0", "end")   # Apaga o texto do TextBox
+        self.textbox.insert("0.0", """
+                            
+
+
+
+                            
+                                    .....::::::...                               
+                                 .:##@@@@@@@@@@##*:.                            
+                             .:*###**::......:**####*:                          
+                           ..:*###*..          .:#@@@*.                         
+                          .*##**:.              .:#@@*.                         
+                         .*#@@*:        ...:..  .*@@@*.                         
+                         .*#@#*.     .:*#***::::*#@@@*.                         
+                       ..:*##*:    .:*#@@#*::::**#@@#:                          
+                       .:**##*:   :*##**:.    .:*###*:                          
+                      .::**#*:.  .:###*:.     .:**##*:                          
+                      .:*****:.  .*#@#*.     .:**##*:.                          
+                      .*###*:.   .*@@@*.     .*###*::.                          
+                      .*##*:..   .*@@@*:....:*@@@#*:.                           
+                      :#@@*:.     :*##***::::*###*:.                            
+                      :#@@#:       ..::***::......                              
+                      :#@@#:.                                                   
+                      .*####**:..                                               
+                       .::*####**::::...                                        
+                           .:**##@@@@#*:..                                      
+                              .........""") # Insere o texto Ascci no TextBox
+        self.textbox.configure(state="disabled", wrap="none")
 
 
 Main = App()
