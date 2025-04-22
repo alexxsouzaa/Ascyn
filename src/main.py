@@ -18,11 +18,11 @@ class App(ctk.CTk):
         # Frame de seleção de arquivos
         self.frame_file = ctk.CTkFrame(
             master=self,
-            width=330,
+            width=340,
             height=122,
             fg_color="#343434"
         )
-        self.frame_file.place(x=21, y=24)
+        self.frame_file.place(x=16, y=16)
 
         self.label_frameFile = ctk.CTkLabel(
             master=self.frame_file,
@@ -35,33 +35,39 @@ class App(ctk.CTk):
         self.label_frameFile.place(x=110, y=52)
 
         # Entry do caminho do arquivo
+        self.label_pathFile = ctk.CTkLabel(
+             master=self,
+             text="Caminho da imagem:"
+         )
+        self.label_pathFile.place(x=16, y=142)
+
         self.entry_pathFile = ctk.CTkEntry(
             master=self,
             fg_color="#343434",
-            width=330,
+            width=340,
             height=32,
             border_width=0
             
         )
-        self.entry_pathFile.place(x=21, y=158)
+        self.entry_pathFile.place(x=16, y=169)
         self.entry_pathFile.configure(state="disabled")
 
         # Frame divisor
         self.frame_diviser = ctk.CTkFrame(
             master=self,
-            width=330,
+            width=340,
             height=2,
             corner_radius=2
         )
-        self.frame_diviser.place(x=21, y=208)
+        self.frame_diviser.place(x=16, y=216)
 
         # ComboBox do padrão de caracteres
         self.label_caracteres = ctk.CTkLabel(
             master=self,
-            text="Padrão de caracteres",
+            text="Padrão de caracteres:",
             font=('Segoe UI', 12),
         )
-        self.label_caracteres.place(x=21, y=226)
+        self.label_caracteres.place(x=16, y=226)
 
         self.comboBox_caracteres = ctk.CTkComboBox(
             master=self,
@@ -69,18 +75,20 @@ class App(ctk.CTk):
             values=["@#*:. ",
                     "@%#0*=-:. ",
                     "@%#0B$&*+=-:,. "],
-            state="readonly"
+            state="readonly",
+            fg_color="#343434",
+            border_color="#343434"
         )
-        self.comboBox_caracteres.place(x=21, y=252)
+        self.comboBox_caracteres.place(x=16, y=252)
         self.comboBox_caracteres.set("@#*:. ")
 
         # ComboBox do extensão de arquivo
         self.label_extensao = ctk.CTkLabel(
             master=self,
-            text="Extensão do arquivo",
+            text="Extensão do arquivo:",
             font=('Segoe UI', 12),
         )
-        self.label_extensao.place(x=21, y=292)
+        self.label_extensao.place(x=16, y=292)
 
         self.comboBox_extensao = ctk.CTkComboBox(
             master=self,
@@ -88,9 +96,12 @@ class App(ctk.CTk):
             values=[
                 ".txt",
                 ".asc"
-            ]
+            ],
+            state="readonly",
+            fg_color="#343434",
+            border_color="#343434"
         )
-        self.comboBox_extensao.place(x=21, y=318)
+        self.comboBox_extensao.place(x=16, y=318)
         self.comboBox_extensao.set(".txt")
 
         # Inverte cores
@@ -100,30 +111,48 @@ class App(ctk.CTk):
             onvalue="True",
             offvalue="False"
         )
-        self.switch_inverteCores.place(x=21, y=360)
+        self.switch_inverteCores.place(x=16, y=360)
 
         self.button_converte = ctk.CTkButton(
             master=self,
             text="Converte",
             height=32,
+            width=100,
+            font=('Segoe UI', 12),
             command=self.text_insert
         )
-        self.button_converte.place(x=21, y=430)
+        self.button_converte.place(x=16, y=437)
         #self.button_converte.configure(state="disabled")
+
+        self.button_copy = ctk.CTkButton(
+            master=self,
+            text="Copiar",
+            font=('Segoe UI', 12),
+            height=32,
+            width=100,
+            fg_color="#ffffff",
+            hover_color="#C7C7C7",
+            text_color="#000000",
+            command=self.copy_text
+        )
+        self.button_copy.place(x=136, y=437)
+        self.button_copy.configure(state="disabled")
 
         self.button_salvar = ctk.CTkButton(
             master=self,
             text="Salvar",
             text_color="#ffffff",
+            font=('Segoe UI', 12),
             height=32,
+            width=100,
             fg_color="#343434",
             hover_color="#444444",
             border_color="#ffffff",
             border_width=1,
             command=self.save_file
         )
-        self.button_salvar.place(x=211, y=430)
-        #self.button_salvar.configure(state="disabled")
+        self.button_salvar.place(x=256, y=437)
+        self.button_salvar.configure(state="disabled")
 
         # Text Box
         self.textbox = ctk.CTkTextbox(
@@ -199,6 +228,8 @@ class App(ctk.CTk):
                 self.textbox.delete("0.0", "end")   # Apaga o texto do TextBox
                 self.textbox.insert("0.0", ascii_text) # Insere o texto Ascci no TextBox
                 self.textbox.configure(state="disabled") # Desabilitar a edição de texto do TextBox
+                self.button_salvar.configure(state="normal")  # Habilita salvar só se algo foi gerado
+                self.button_copy.configure(state="normal") # Habilita copia o texto do TextBox
                 self.show_feedback("Imagem convertida com sucesso!", "#69FE69", "#000000") # Aviso que a imagem foi convertida com sucesso
             else:
                 self.show_feedback("Nenhuma imagem selecionada.", "#FE696B", "#000000") # Aviso que nenhuma imagem foi selecionada
@@ -227,6 +258,7 @@ class App(ctk.CTk):
                 else:
                     print("Salvamento cancelado")
             else:
+                self.show_feedback("O arquivo não foi convertido", "#FE696B", "#000000")
                 print("O arquivo não foi convertido")
 
         except Exception as error:
@@ -253,8 +285,8 @@ class App(ctk.CTk):
             self.frame_feedback.place(x=41, y=y_inicial)
             self.after(delay, lambda: self.slide_feedback(y_inicial, y_final, subindo, passo, delay))
         elif not subindo:
-            # Espera 2 segundos, depois anima pra cima
-            self.after(2000, lambda: self.slide_feedback(y_inicial=y_final, y_final=-50, subindo=True, passo=2, delay=10))
+            # Espera 1,2 segundos, depois anima pra cima
+            self.after(1200, lambda: self.slide_feedback(y_inicial=y_final, y_final=-50, subindo=True, passo=2, delay=10))
         elif subindo and y_inicial > y_final:
             y_inicial -= passo
             self.frame_feedback.place(x=41, y=y_inicial)
@@ -262,6 +294,17 @@ class App(ctk.CTk):
         else:
             self.frame_feedback.place_forget()
 
+    def copy_text(self):
+        try:
+            content = self.textbox.get("0.0", "end").strip()
+            if content:
+                self.clipboard_clear()
+                self.clipboard_append(content)
+                self.show_feedback("Texto copiado com sucesso!", "#5D96FF", "#000000")
+            else:
+                self.show_feedback("Nenhum conteúdo para copiar.", "#FE696B", "#000000")
+        except:
+            self.show_feedback("Erro ao copiar o texto!", "#FE696B", "#ffffff")
 
 
 Main = App()
