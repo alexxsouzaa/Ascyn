@@ -45,6 +45,10 @@ pip install customtkinter pillow
     - Inverter as cores (se necessário).
     - Converter a imagem para arte ASCII.
     - Copiar ou salvar o arquivo gerado.
+  
+## Imagens
+
+![Ascyn screen 1](https://github.com/user-attachments/assets/4ddc826f-30f2-4a12-a402-d2a1a5dc52c7)
 
 ## Licença
 
