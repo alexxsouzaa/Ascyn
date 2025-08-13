@@ -49,7 +49,3 @@ pip install customtkinter pillow
 ## Imagens
 
 ![Ascyn screen 1](https://github.com/user-attachments/assets/4ddc826f-30f2-4a12-a402-d2a1a5dc52c7)
-
-## Licença
-
-Este projeto está licenciado sob a [Licença GPL-3.0](https://opensource.org/licenses/GPL-3.0).
