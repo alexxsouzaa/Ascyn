@@ -3,7 +3,6 @@ from PIL import Image, ImageEnhance, ImageOps
 from typing import Optional
 
 class AsciiEngine:
-    CHARS = "@%#*+=-:. "[::-1]  # do mais escuro pro mais claro
 
     def __init__(self):
         self.imagem_original: Optional[Image.Image] = None
@@ -56,7 +55,7 @@ class AsciiEngine:
         # SALVA A IMAGEM JÁ AJUSTADA
         self.imagem_processada = img
 
-    def converter_imagem(self, largura: int = 140) -> str:
+    def converter_imagem(self, chars: chr="@%#*+=-:. "[::-1], largura: int = 90) -> str:
         if not self.imagem_processada:
             return "Nenhuma imagem carregada"
 
@@ -67,10 +66,11 @@ class AsciiEngine:
         ratio = img_cinza.height / img_cinza.width
         altura = int(largura * ratio * 0.55)
 
+        chars = chars[::-1]
         img_cinza = img_cinza.resize((largura, altura), Image.Resampling.LANCZOS)
         pixels = img_cinza.getdata()
 
-        ascii_str = "".join(self.CHARS[pixel * (len(self.CHARS)-1) // 255] for pixel in pixels)
+        ascii_str = "".join(chars[pixel * (len(chars)-1) // 255] for pixel in pixels)
         return "\n".join(ascii_str[i:i+largura] for i in range(0, len(ascii_str), largura))
 
     def reset(self):

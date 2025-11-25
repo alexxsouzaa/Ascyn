@@ -1,13 +1,14 @@
 from typing import Self
 from PySide6.QtWidgets import (
     QWidget, QPushButton, QVBoxLayout,
-    QFileDialog, QLabel, QPlainTextEdit, QSlider
+    QFileDialog, QLabel, QPlainTextEdit,
+    QSlider, QFontComboBox, QSpinBox, QComboBox
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
 from core.ascii_engine import AsciiEngine
-from core.utils import copiar_para_clipboard
-from PySide6.QtGui import QFont
+from core.clipboard_utils import copiar_para_clipboard, recortar_texto, atualiza_font
+from PySide6.QtGui import QFont, QFontDatabase
 import sys
 import os
 
@@ -45,18 +46,21 @@ class MainWindow(QWidget):
         # ===============================================================
         # 3. CACHE DOS WIDGETS PRINCIPAIS
         # ===============================================================
-        self.wdg_open_file = self.ui.findChild(QWidget,   "wdgOpenFile")
-        self.lbl_file_path = self.ui.findChild(QLabel,    "lblFilePath")
-        self.lbl_file_name = self.ui.findChild(QLabel,    "lblFileName")
-        self.lbl_file_size = self.ui.findChild(QLabel,    "lblFileSize")
-        self.btn_converter = self.ui.findChild(QPushButton, "btnConverter")
-        self.pteAsciiArt = self.ui.findChild(QPlainTextEdit, "pteAsciiArt")
-        self.sldBrilho = self.ui.findChild(QSlider, "sldBrilho")
-        self.sldContraste = self.ui.findChild(QSlider, "sldContraste")
-        self.sldSaturacao = self.ui.findChild(QSlider, "sldSaturacao")
-        self.btnReset = self.findChild(QPushButton, "btnResetAjustes")
-        self.btnCopiar = self.ui.findChild(QPushButton, "btnCopiar")
-        self.btnRecortar = self.ui.findChild(QPushButton, "btnRecortar")
+        self.wdg_open_file = self.ui.findChild(QWidget,        "wdgOpenFile")
+        self.lbl_file_path = self.ui.findChild(QLabel,         "lblFilePath")
+        self.lbl_file_name = self.ui.findChild(QLabel,         "lblFileName")
+        self.lbl_file_size = self.ui.findChild(QLabel,         "lblFileSize")
+        self.btn_converter = self.ui.findChild(QPushButton,    "btnConverter")
+        self.pteAsciiArt   = self.ui.findChild(QPlainTextEdit, "pteAsciiArt")
+        self.sldBrilho     = self.ui.findChild(QSlider,        "sldBrilho")
+        self.sldContraste  = self.ui.findChild(QSlider,        "sldContraste")
+        self.sldSaturacao  = self.ui.findChild(QSlider,        "sldSaturacao")
+        self.btnReset      = self.findChild(QPushButton,       "btnResetAjustes")
+        self.btnCopiar     = self.ui.findChild(QPushButton,    "btnCopiar")
+        self.btnRecortar   = self.ui.findChild(QPushButton,    "btnRecortar")
+        self.cmbFonte      = self.ui.findChild(QFontComboBox,  "cmbFonte")
+        self.cmbTamanho    = self.ui.findChild(QSpinBox,       "spnTamanho")
+        self.cmbChars      = self.ui.findChild(QComboBox,      "cmbChars")
         
         # Configuração perfeita dos sliders
         sliders_config = {
@@ -95,7 +99,22 @@ class MainWindow(QWidget):
         if self.btnCopiar:
             self.btnCopiar.clicked.connect(self.copiar_ascii)
             
-                
+        if self.btnRecortar:
+            self.btnRecortar.clicked.connect(self.recortar_ascii)
+        
+        # CONECTA O SINAL
+        self.cmbFonte.currentFontChanged.connect(
+            lambda font: atualiza_font(self.pteAsciiArt, font)
+        )
+        
+        self.cmbChars.currentTextChanged.connect(
+            self.atualizar_ascii
+        )
+
+        # Aplica a fonte inicial
+        if self.cmbFonte.currentFont():
+            atualiza_font(self.pteAsciiArt, self.cmbFonte.currentFont())
+                    
     # ===================================================================
     # EVENT FILTER – Arrastar + Clique duplo + Abrir arquivo
     # ===================================================================
@@ -134,6 +153,7 @@ class MainWindow(QWidget):
         # Carrega a imagem no engine e já gera o primeiro ASCII
         self.engine.carregar_imagem(self.file_path)
         self.atualizar_ascii()
+        self.resetar_ajustes()
     
     # ===================================================================
     # CONVERSÃO + ATUALIZA A VIZUALIZAÇÃO DA ART
@@ -148,12 +168,11 @@ class MainWindow(QWidget):
         self.engine.set_ajuste("contraste",  self.sldContraste.value()  / 100.0)
         self.engine.set_ajuste("saturacao",  self.sldSaturacao.value()  / 100.0)
             
-        ascii_art = self.engine.converter_imagem()
+        ascii_art = self.engine.converter_imagem(self.cmbChars.currentText())
         if self.pteAsciiArt:
             self.pteAsciiArt.setPlainText(ascii_art)
             
     def resetar_ajustes(self):
-        """Botão Reset"""
         for slider in [self.sldBrilho, self.sldContraste, self.sldSaturacao]:
             if slider:
                 slider.setValue(100)
@@ -163,3 +182,7 @@ class MainWindow(QWidget):
     def copiar_ascii(self):
         texto = self.pteAsciiArt.toPlainText()
         copiar_para_clipboard(texto, self.btnCopiar)
+        
+        
+    def recortar_ascii(self):
+        recortar_texto(self.pteAsciiArt, self.btnRecortar)

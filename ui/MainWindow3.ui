@@ -1202,7 +1202,7 @@ QLabel {
                       </widget>
                      </item>
                      <item>
-                      <widget class="QComboBox" name="comboBox_7">
+                      <widget class="QComboBox" name="cmbChars">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
@@ -1287,6 +1287,21 @@ QComboBox QAbstractItemView {
                        <item>
                         <property name="text">
                          <string>@%#0B$&amp;*+=-:,. </string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>░▒▓█</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>▀▄▌▐▀</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string>▓▒░█▓▒░</string>
                         </property>
                        </item>
                       </widget>
@@ -1590,7 +1605,7 @@ QPushButton::hover{
                 <number>8</number>
                </property>
                <item>
-                <widget class="QFontComboBox" name="fontComboBox">
+                <widget class="QFontComboBox" name="cmbFonte">
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
@@ -1662,7 +1677,7 @@ QComboBox QAbstractItemView {
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spinBox">
+                <widget class="QSpinBox" name="cmbTamanho">
                  <property name="minimumSize">
                   <size>
                    <width>78</width>
@@ -1855,7 +1870,7 @@ QPushButton::hover{
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_5">
+                <widget class="QPushButton" name="btnRecortar">
                  <property name="minimumSize">
                   <size>
                    <width>74</width>
@@ -2000,6 +2015,9 @@ QPushButton::hover{
                  <property name="sizeAdjustPolicy">
                   <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
                  </property>
+                 <property name="tabChangesFocus">
+                  <bool>true</bool>
+                 </property>
                  <property name="plainText">
                   <string>ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
 Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
@@ -2012,6 +2030,15 @@ Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e texto
                  </property>
                  <property name="textInteractionFlags">
                   <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                 </property>
+                 <property name="backgroundVisible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="centerOnScroll">
+                  <bool>false</bool>
+                 </property>
+                 <property name="placeholderText">
+                  <string/>
                  </property>
                 </widget>
                </item>
