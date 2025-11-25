@@ -2,7 +2,7 @@ from typing import Self
 from PySide6.QtWidgets import (
     QWidget, QPushButton, QVBoxLayout,
     QFileDialog, QLabel, QPlainTextEdit,
-    QSlider, QFontComboBox, QSpinBox, QComboBox
+    QSlider, QFontComboBox, QSpinBox, QComboBox, QRadioButton
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
@@ -55,12 +55,13 @@ class MainWindow(QWidget):
         self.sldBrilho     = self.ui.findChild(QSlider,        "sldBrilho")
         self.sldContraste  = self.ui.findChild(QSlider,        "sldContraste")
         self.sldSaturacao  = self.ui.findChild(QSlider,        "sldSaturacao")
-        self.btnReset      = self.findChild(QPushButton,       "btnResetAjustes")
+        self.btnReset      = self.ui.findChild(QPushButton,       "btnResetAjustes")
         self.btnCopiar     = self.ui.findChild(QPushButton,    "btnCopiar")
         self.btnRecortar   = self.ui.findChild(QPushButton,    "btnRecortar")
         self.cmbFonte      = self.ui.findChild(QFontComboBox,  "cmbFonte")
         self.cmbTamanho    = self.ui.findChild(QSpinBox,       "spnTamanho")
         self.cmbChars      = self.ui.findChild(QComboBox,      "cmbChars")
+        self.radioInverteCores = self.ui.findChild(QRadioButton, "radioInverteCores")
         
         # Configuração perfeita dos sliders
         sliders_config = {
@@ -110,6 +111,8 @@ class MainWindow(QWidget):
         self.cmbChars.currentTextChanged.connect(
             self.atualizar_ascii
         )
+        
+        self.radioInverteCores.clicked.connect(self.atualizar_ascii)
 
         # Aplica a fonte inicial
         if self.cmbFonte.currentFont():
@@ -167,6 +170,7 @@ class MainWindow(QWidget):
         self.engine.set_ajuste("brilho",     self.sldBrilho.value()     / 100.0)
         self.engine.set_ajuste("contraste",  self.sldContraste.value()  / 100.0)
         self.engine.set_ajuste("saturacao",  self.sldSaturacao.value()  / 100.0)
+        self.engine.set_ajuste("inverter",  self.radioInverteCores.isChecked())
             
         ascii_art = self.engine.converter_imagem(self.cmbChars.currentText())
         if self.pteAsciiArt:

@@ -55,12 +55,17 @@ class AsciiEngine:
         # SALVA A IMAGEM JÁ AJUSTADA
         self.imagem_processada = img
 
-    def converter_imagem(self, chars: chr="@%#*+=-:. "[::-1], largura: int = 90) -> str:
+    def converter_imagem(
+        self,
+        chars: chr="@%#*+=-:. "[::-1],
+        largura: int = 90
+) -> str:
         if not self.imagem_processada:
             return "Nenhuma imagem carregada"
 
         # USA A IMAGEM JÁ COM AJUSTES APLICADOS
         img_cinza = self.imagem_processada.convert("L")
+        
 
         # Mantém proporção
         ratio = img_cinza.height / img_cinza.width

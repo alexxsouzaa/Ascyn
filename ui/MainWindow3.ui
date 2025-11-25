@@ -1033,6 +1033,9 @@ QSlider::handle:horizontal {
                       <height>34</height>
                      </size>
                     </property>
+                    <property name="layoutDirection">
+                     <enum>Qt::LayoutDirection::RightToLeft</enum>
+                    </property>
                     <property name="styleSheet">
                      <string notr="true">QPushButton{
 	background-color: rgb(36, 36, 36);
@@ -1044,10 +1047,27 @@ QPushButton::hover{
 	background-color: rgb(28, 28, 28);
 	border: 1px solid #242424;
 	border-radius: 4px;
-}</string>
+}
+</string>
                     </property>
                     <property name="text">
-                     <string>Restaurar</string>
+                     <string>Restaurar   </string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="../assets/icons/resource_icons.qrc">
+                      <normaloff>:/icons/reset.svg</normaloff>:/icons/reset.svg</iconset>
+                    </property>
+                    <property name="shortcut">
+                     <string/>
+                    </property>
+                    <property name="autoRepeat">
+                     <bool>false</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>false</bool>
+                    </property>
+                    <property name="flat">
+                     <bool>false</bool>
                     </property>
                    </widget>
                   </item>
@@ -1212,12 +1232,11 @@ QLabel {
                        <property name="maximumSize">
                         <size>
                          <width>16777215</width>
-                         <height>38</height>
+                         <height>34</height>
                         </size>
                        </property>
                        <property name="font">
                         <font>
-                         <pointsize>-1</pointsize>
                          <bold>false</bold>
                         </font>
                        </property>
@@ -1233,40 +1252,37 @@ QLabel {
     border: 1px solid #212121;
     border-radius: 4px;
     color: #ffffff;
-    font-size: 12px;
-	padding: 8px;
+    padding: 8px 8px 8px 8px;     /* ← espaço pra seta */
+    min-height: 20px;
 }
 
-/* Botão da seta */
+QComboBox:hover {
+	background-color: rgb(36, 36, 36);
+}
+
+/* === AQUI É O SEGREDO QUE NUNCA FALHA === */
 QComboBox::drop-down {
-    width: 20px;
-    border-left: 1px solid #212121;
-    background-color: #1A1A1A;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border: none;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+    background: transparent;       /* ← remove fundo */
 }
 
-/* Ícone da seta */
 QComboBox::down-arrow {
-    /*image: url(&quot;resources/icons/arrow.png&quot;);*/
-    width: 24px;
-    height: 14px;
+    image: url(:/icons/arrow-down.svg);   /* ← SEU SVG AQUI */
+    width: 12px;
+    height: 12px;
+    margin-right: 0px;
+    margin-top: 0px;
 }
 
-/* Quando estiver aberto */
+/* Quando abre o menu (opcional: seta pra cima) */
 QComboBox::down-arrow:on {
-  /*  image: url(&quot;resources/icons/arrow.png&quot;);  aqui você pode trocar por uma seta invertida */
-}
-
-/* Lista suspensa */
-QComboBox QAbstractItemView {
-    background-color: #1e1e1e;
-    border: 1px solid #212121;
-    selection-background-color: #1A1A1A;
-    selection-color: #ffffff;
-    padding: 4px;
-}
-</string>
+    image: url(:/icons/arrow-up.svg);
+}</string>
                        </property>
                        <property name="currentIndex">
                         <number>0</number>
@@ -1304,20 +1320,41 @@ QComboBox QAbstractItemView {
                          <string>▓▒░█▓▒░</string>
                         </property>
                        </item>
+                       <item>
+                        <property name="text">
+                         <string>$@B%8&amp;WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~&lt;&gt;i!lI;:,\&quot;^`'. &quot;</string>
+                        </property>
+                       </item>
                       </widget>
+                     </item>
+                     <item>
+                      <spacer name="verticalSpacer_8">
+                       <property name="orientation">
+                        <enum>Qt::Orientation::Vertical</enum>
+                       </property>
+                       <property name="sizeType">
+                        <enum>QSizePolicy::Policy::Fixed</enum>
+                       </property>
+                       <property name="sizeHint" stdset="0">
+                        <size>
+                         <width>20</width>
+                         <height>8</height>
+                        </size>
+                       </property>
+                      </spacer>
                      </item>
                      <item>
                       <widget class="QFrame" name="frame">
                        <property name="minimumSize">
                         <size>
                          <width>0</width>
-                         <height>38</height>
+                         <height>34</height>
                         </size>
                        </property>
                        <property name="maximumSize">
                         <size>
                          <width>16777215</width>
-                         <height>38</height>
+                         <height>34</height>
                         </size>
                        </property>
                        <property name="styleSheet">
@@ -1335,7 +1372,7 @@ QComboBox QAbstractItemView {
                        </property>
                        <layout class="QHBoxLayout" name="horizontalLayout_13">
                         <item>
-                         <widget class="QRadioButton" name="radioButton">
+                         <widget class="QRadioButton" name="radioInverteCores">
                           <property name="font">
                            <font>
                             <pointsize>10</pointsize>
@@ -1365,7 +1402,7 @@ QRadioButton::indicator:checked {
 
 QRadioButton::indicator:hover {
     border: 1.5px solid #ffffff;
-	border-radius: 4px;
+	border-radius: 5px;
 }</string>
                           </property>
                           <property name="text">
@@ -1381,7 +1418,7 @@ QRadioButton::indicator:hover {
                           <property name="sizeHint" stdset="0">
                            <size>
                             <width>179</width>
-                            <height>15</height>
+                            <height>11</height>
                            </size>
                           </property>
                          </spacer>
@@ -1659,11 +1696,17 @@ QComboBox QAbstractItemView {
 }
 </string>
                  </property>
+                 <property name="editable">
+                  <bool>false</bool>
+                 </property>
                  <property name="currentIndex">
                   <number>2</number>
                  </property>
                  <property name="frame">
                   <bool>true</bool>
+                 </property>
+                 <property name="labelDrawingMode">
+                  <enum>QComboBox::LabelDrawingMode::UseStyle</enum>
                  </property>
                  <property name="fontFilters">
                   <set>QFontComboBox::FontFilter::MonospacedFonts</set>
@@ -1938,7 +1981,7 @@ QPushButton::hover{
                 <widget class="QPushButton" name="pushButton_8">
                  <property name="minimumSize">
                   <size>
-                   <width>86</width>
+                   <width>100</width>
                    <height>26</height>
                   </size>
                  </property>
@@ -1947,6 +1990,9 @@ QPushButton::hover{
                    <pointsize>-1</pointsize>
                    <fontweight>DemiBold</fontweight>
                   </font>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LayoutDirection::RightToLeft</enum>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">QPushButton{
@@ -1962,7 +2008,11 @@ QPushButton::hover{
 }</string>
                  </property>
                  <property name="text">
-                  <string>Exportar</string>
+                  <string>Exportar   </string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../assets/icons/resource_icons.qrc">
+                   <normaloff>:/icons/export.svg</normaloff>:/icons/export.svg</iconset>
                  </property>
                 </widget>
                </item>
