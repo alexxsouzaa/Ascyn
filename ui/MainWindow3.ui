@@ -1610,7 +1610,7 @@ QPushButton::hover{
     border-radius: 6px;
     color: #ffffff;
     font-size: 12px;
-	padding: 4px;
+	padding-left: 4px
 }
 
 /* Botão da seta */
@@ -1644,6 +1644,21 @@ QComboBox QAbstractItemView {
 }
 </string>
                  </property>
+                 <property name="currentIndex">
+                  <number>2</number>
+                 </property>
+                 <property name="frame">
+                  <bool>true</bool>
+                 </property>
+                 <property name="fontFilters">
+                  <set>QFontComboBox::FontFilter::MonospacedFonts</set>
+                 </property>
+                 <property name="currentFont">
+                  <font>
+                   <family>Consolas</family>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -1666,7 +1681,7 @@ QComboBox QAbstractItemView {
     border: 1px solid #242424;
     border-radius: 6px;
 	font-size: 12px;
-	padding: 4px;
+	padding-left: 4px
 }
 
 /* Botão de aumentar */
@@ -1814,11 +1829,11 @@ QComboBox QAbstractItemView {
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_4">
+                <widget class="QPushButton" name="btnCopiar">
                  <property name="minimumSize">
                   <size>
                    <width>74</width>
-                   <height>24</height>
+                   <height>26</height>
                   </size>
                  </property>
                  <property name="styleSheet">
@@ -1844,7 +1859,7 @@ QPushButton::hover{
                  <property name="minimumSize">
                   <size>
                    <width>74</width>
-                   <height>24</height>
+                   <height>26</height>
                   </size>
                  </property>
                  <property name="styleSheet">
@@ -1870,7 +1885,7 @@ QPushButton::hover{
                  <property name="minimumSize">
                   <size>
                    <width>74</width>
-                   <height>24</height>
+                   <height>26</height>
                   </size>
                  </property>
                  <property name="styleSheet">
@@ -1909,7 +1924,7 @@ QPushButton::hover{
                  <property name="minimumSize">
                   <size>
                    <width>86</width>
-                   <height>24</height>
+                   <height>26</height>
                   </size>
                  </property>
                  <property name="font">
@@ -1978,6 +1993,12 @@ QPushButton::hover{
         selection-background-color: #6B9FFF;   /* ← fundo da seleção */
         selection-color: black;                /* ← texto selecionado */
     }</string>
+                 </property>
+                 <property name="verticalScrollBarPolicy">
+                  <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+                 </property>
+                 <property name="sizeAdjustPolicy">
+                  <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustIgnored</enum>
                  </property>
                  <property name="plainText">
                   <string>ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.

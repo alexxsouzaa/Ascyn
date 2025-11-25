@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
 from core.ascii_engine import AsciiEngine
+from core.utils import copiar_para_clipboard
 from PySide6.QtGui import QFont
 import sys
 import os
@@ -54,6 +55,8 @@ class MainWindow(QWidget):
         self.sldContraste = self.ui.findChild(QSlider, "sldContraste")
         self.sldSaturacao = self.ui.findChild(QSlider, "sldSaturacao")
         self.btnReset = self.findChild(QPushButton, "btnResetAjustes")
+        self.btnCopiar = self.ui.findChild(QPushButton, "btnCopiar")
+        self.btnRecortar = self.ui.findChild(QPushButton, "btnRecortar")
         
         # Configuração perfeita dos sliders
         sliders_config = {
@@ -88,6 +91,10 @@ class MainWindow(QWidget):
                 
         if self.btnReset:
             self.btnReset.clicked.connect(self.resetar_ajustes)
+            
+        if self.btnCopiar:
+            self.btnCopiar.clicked.connect(self.copiar_ascii)
+            
                 
     # ===================================================================
     # EVENT FILTER – Arrastar + Clique duplo + Abrir arquivo
@@ -129,7 +136,7 @@ class MainWindow(QWidget):
         self.atualizar_ascii()
     
     # ===================================================================
-    # CONVERSÃO
+    # CONVERSÃO + ATUALIZA A VIZUALIZAÇÃO DA ART
     # ===================================================================
     def atualizar_ascii(self):
         """Atualiza ASCII art com ajustes atuais – CHAMADA PELOS SLIDERS!"""
@@ -152,3 +159,7 @@ class MainWindow(QWidget):
                 slider.setValue(100)
         self.engine.reset()
         self.atualizar_ascii()
+        
+    def copiar_ascii(self):
+        texto = self.pteAsciiArt.toPlainText()
+        copiar_para_clipboard(texto, self.btnCopiar)
