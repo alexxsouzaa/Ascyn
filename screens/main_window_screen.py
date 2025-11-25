@@ -1,9 +1,12 @@
+from typing import Self
 from PySide6.QtWidgets import (
-    QWidget, QPushButton, QApplication, QVBoxLayout,
-    QFileDialog, QLabel
+    QWidget, QPushButton, QVBoxLayout,
+    QFileDialog, QLabel, QPlainTextEdit, QSlider
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
+from core.ascii_engine import AsciiEngine
+from PySide6.QtGui import QFont
 import sys
 import os
 
@@ -15,7 +18,6 @@ import core.resources  # noqa: F401
 
 
 class MainWindow(QWidget):
-    """Janela principal do aplicativo Ascyn – Frameless com barra personalizada"""
 
     def __init__(self):
         super().__init__()
@@ -24,142 +26,129 @@ class MainWindow(QWidget):
         # 1. CARREGA A INTERFACE DO ARQUIVO .UI
         # ===============================================================
         loader = QUiLoader()
-        ui_file = QFile("ui/MainWindow.ui")
+        ui_file = QFile("ui/MainWindow3.ui")
         ui_file.open(QFile.ReadOnly)
-        self.ui = loader.load(ui_file, self)   # Carrega o conteúdo dentro da janela
+        self.ui = loader.load(ui_file, self)
         ui_file.close()
-
-        # ===============================================================
-        # 2. AJUSTA O LAYOUT PRINCIPAL (necessário para o widget carregado ocupar 100%)
-        # ===============================================================
+        
         layout = QVBoxLayout(self)
         layout.addWidget(self.ui)
         layout.setContentsMargins(0, 0, 0, 0)
 
         # ===============================================================
-        # 3. REMOVE BORDA E FUNDO PADRÃO DO WINDOWS (Frameless + fundo transparente)
+        # 2. INSTANCIA O ENGINE
         # ===============================================================
-        self.ui.setWindowFlags(Qt.FramelessWindowHint | Qt.Window)
-        self.ui.setAttribute(Qt.WA_TranslucentBackground)
+        self.engine = AsciiEngine()
+        self.file_path = None  # Guarda o caminho da imagem
+        
+        # ===============================================================
+        # 3. CACHE DOS WIDGETS PRINCIPAIS
+        # ===============================================================
+        self.wdg_open_file = self.ui.findChild(QWidget,   "wdgOpenFile")
+        self.lbl_file_path = self.ui.findChild(QLabel,    "lblFilePath")
+        self.lbl_file_name = self.ui.findChild(QLabel,    "lblFileName")
+        self.lbl_file_size = self.ui.findChild(QLabel,    "lblFileSize")
+        self.btn_converter = self.ui.findChild(QPushButton, "btnConverter")
+        self.pteAsciiArt = self.ui.findChild(QPlainTextEdit, "pteAsciiArt")
+        self.sldBrilho = self.ui.findChild(QSlider, "sldBrilho")
+        self.sldContraste = self.ui.findChild(QSlider, "sldContraste")
+        self.sldSaturacao = self.ui.findChild(QSlider, "sldSaturacao")
+        self.btnReset = self.findChild(QPushButton, "btnResetAjustes")
+        
+        # Configuração perfeita dos sliders
+        sliders_config = {
+            self.sldBrilho:     (0, 300, 100),
+            self.sldContraste:  (0, 400, 100),
+            self.sldSaturacao:  (0, 300, 100),
+        }
+
+        for slider, (min_val, max_val, default) in sliders_config.items():
+            if slider:
+                slider.setRange(min_val, max_val)
+                slider.setValue(default)
+                slider.setSingleStep(5)
+                slider.setPageStep(20)
+                slider.valueChanged.connect(self.atualizar_ascii)
 
         # ===============================================================
-        # 4. ESTADO DA JANELA
-        # ===============================================================
-        self.is_maximized = False          # Controla se está maximizada
-        self.drag_pos = None               # Armazena posição do mouse ao arrastar
-
-        # ===============================================================
-        # 5. CACHE DOS WIDGETS PRINCIPAIS (evita buscas repetidas)
-        # ===============================================================
-        self.title_bar        = self.ui.findChild(QWidget,   "wdgTitleBar")
-        self.btn_close        = self.ui.findChild(QPushButton, "btnClose")
-        self.btn_minimize     = self.ui.findChild(QPushButton, "btnMinimize")
-        self.btn_maximize     = self.ui.findChild(QPushButton, "btnMaximize")
-        self.wdg_open_file    = self.ui.findChild(QWidget,   "wdgOpenFile")
-        self.lbl_file_path    = self.ui.findChild(QLabel,    "lblFilePath")
-        self.lbl_file_name    = self.ui.findChild(QLabel,    "lblFileName")
-        self.lbl_file_size    = self.ui.findChild(QLabel,    "lblFileSize")
-
-        # ===============================================================
-        # 6. CONEXÃO DOS BOTÕES DA BARRA DE TÍTULO
-        # ===============================================================
-        if self.btn_close:
-            self.btn_close.clicked.connect(QApplication.quit)                 # Fecha o app
-
-        if self.btn_minimize:
-            self.btn_minimize.clicked.connect(self.ui.showMinimized)             # Minimiza a janela
-
-        if self.btn_maximize:
-            self.btn_maximize.clicked.connect(self.toggle_maximize)           # Alterna maximizar/restaurar
-
-        # ===============================================================
-        # 7. TORNA ÁREAS CLICÁVEIS/ARRASTÁVEIS
+        # 4. CONFIGURAÇÕES INICIAIS
         # ===============================================================
         if self.wdg_open_file:
-            self.wdg_open_file.setCursor(Qt.PointingHandCursor)                # Cursor de "clicável"
-            self.wdg_open_file.installEventFilter(self)                        # Captura cliques
+            self.wdg_open_file.setCursor(Qt.PointingHandCursor)
+            self.wdg_open_file.installEventFilter(self)
 
-        if self.title_bar:
-            self.title_bar.installEventFilter(self)                            # Permite arrastar a janela
-             
+        if self.btn_converter:
+            self.btn_converter.clicked.connect(self.atualizar_ascii)
+        
+        if self.pteAsciiArt:
+            font = QFont("Consolas", 10)          # Melhor fonte
+            font.setStyleHint(QFont.Monospace)    # Força espaçamento fixo
+            font.setFixedPitch(True)              # Garante alinhamento perfeito
+            self.pteAsciiArt.setFont(font)
+                
+        if self.btnReset:
+            self.btnReset.clicked.connect(self.resetar_ajustes)
+                
     # ===================================================================
-    # EVENT FILTER – Gerencia cliques e arraste em widgets personalizados
+    # EVENT FILTER – Arrastar + Clique duplo + Abrir arquivo
     # ===================================================================
-    def eventFilter(self, obj: QWidget, event: QEvent) -> bool:
-        # ---------- CLIQUE NO WIDGET DE ABERTURA DE ARQUIVO ----------
+    def eventFilter(self, obj, event):
+        # --- CLIQUE NO BOTÃO DE ABRIR ARQUIVO ---
         if obj == self.wdg_open_file:
             if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
-                self.open_file()                     # Abre o explorador de arquivos
-                return True                          # Consome o evento
-
-        # ---------- ARRASTAR A JANELA PELA BARRA DE TÍTULO ----------
-        if obj == self.title_bar:
-            if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
-                self.drag_pos = event.globalPosition().toPoint()
+                self.open_file()
                 return True
 
-            elif event.type() == QEvent.MouseMove and event.buttons() & Qt.LeftButton:
-                if self.drag_pos:
-                    delta = event.globalPosition().toPoint() - self.drag_pos
-                    self.ui.showNormal()
-                    self.ui.move(self.ui.pos() + delta)    # Move a janela inteira
-                    self.drag_pos = event.globalPosition().toPoint()
-                return True
-
-            elif event.type() == QEvent.MouseButtonRelease:
-                self.drag_pos = None
-                return True
-
-        # Evento não tratado por nós → deixa o Qt processar normalmente
         return super().eventFilter(obj, event)
 
     # ===================================================================
-    # MAXIMIZAR / RESTAURAR JANELA (sem bordas do Windows ao restaurar)
-    # ===================================================================
-    def toggle_maximize(self):
-        if self.is_maximized:
-            # Restaura tamanho/posição anterior sem bordas
-            self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window)
-            self.ui.showNormal()
-            self.is_maximized = False
-        else:
-            # Maximiza ocupando toda a tela
-            self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window)
-            self.ui.showMaximized()
-            self.is_maximized = True
-    
-    # ===================================================================
-    # ABRE EXPLORADOR DE ARQUIVOS E ATUALIZA INFORMAÇÕES DO ARQUIVO
+    # ABRIR ARQUIVO E ATUALIZAR INFORMAÇÕES
     # ===================================================================
     def open_file(self) -> str | None:
-        """
-        Abre o diálogo nativo de seleção de arquivo.
-        Atualiza labels com caminho completo, nome e tamanho do arquivo.
-        Retorna o caminho completo ou None se cancelado.
-        """
-        file_path, _ = QFileDialog.getOpenFileName(
-            self,
-            "Selecione uma imagem",
-            "",
+        self.file_path, _ = QFileDialog.getOpenFileName(
+            self, "Selecione uma imagem", "",
             "Imagens (*.png *.jpg *.jpeg *.webp);;Todos os arquivos (*.*)"
         )
-        
-        if file_path:
-            # --- Nome do arquivo (sem caminho) ---
-            file_name = os.path.basename(file_path)
-            if self.lbl_file_name:
-                self.lbl_file_name.setText(file_name)
 
-            # --- Caminho completo ---
-            if self.lbl_file_path:
-                self.lbl_file_path.setText(file_path)
-
-            # --- Tamanho do arquivo em MB ---
-            file_info = QFileInfo(file_path)
-            size_mb = file_info.size() / (1024 * 1024)           # bytes → MB
-            if self.lbl_file_size:
-                self.lbl_file_size.setText(f"{size_mb:.2f} MB")
-
-            return file_path
-        else:
+        if not self.file_path:
             return None
+
+        # Nome do arquivo
+        if self.lbl_file_name:
+            self.lbl_file_name.setText(os.path.basename(self.file_path))
+        # Caminho completo
+        if self.lbl_file_path:
+            self.lbl_file_path.setText(self.file_path)
+        # Tamanho em MB
+        size_mb = QFileInfo(self.file_path).size() / (1024 * 1024)
+        if self.lbl_file_size:
+            self.lbl_file_size.setText(f"{size_mb:.2f} MB")
+            
+        # Carrega a imagem no engine e já gera o primeiro ASCII
+        self.engine.carregar_imagem(self.file_path)
+        self.atualizar_ascii()
+    
+    # ===================================================================
+    # CONVERSÃO
+    # ===================================================================
+    def atualizar_ascii(self):
+        """Atualiza ASCII art com ajustes atuais – CHAMADA PELOS SLIDERS!"""
+        if not self.file_path or not self.engine.imagem_original:
+            return
+
+        # PEGA OS VALORES DOS SLIDERS
+        self.engine.set_ajuste("brilho",     self.sldBrilho.value()     / 100.0)
+        self.engine.set_ajuste("contraste",  self.sldContraste.value()  / 100.0)
+        self.engine.set_ajuste("saturacao",  self.sldSaturacao.value()  / 100.0)
+            
+        ascii_art = self.engine.converter_imagem()
+        if self.pteAsciiArt:
+            self.pteAsciiArt.setPlainText(ascii_art)
+            
+    def resetar_ajustes(self):
+        """Botão Reset"""
+        for slider in [self.sldBrilho, self.sldContraste, self.sldSaturacao]:
+            if slider:
+                slider.setValue(100)
+        self.engine.reset()
+        self.atualizar_ascii()

@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icons">
+    <file>folder.png</file>
+    <file>folder.svg</file>
     <file>ascyn_logo_16x16.svg</file>
     <file>clip_logo.png</file>
     <file>close.svg</file>
