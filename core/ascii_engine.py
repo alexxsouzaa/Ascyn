@@ -1,85 +1,114 @@
 # core/ascii_engine.py
 from PIL import Image, ImageEnhance, ImageOps
-from typing import Optional
+from typing import Optional, Dict
 
 class AsciiEngine:
-
+    """Engine responsável por carregar imagem, aplicar ajustes e gerar ASCII art."""
+    
     def __init__(self):
-        self.imagem_original: Optional[Image.Image] = None
-        self.imagem_processada: Optional[Image.Image] = None
+        self.original_image: Optional[Image.Image] = None
+        self.processed_image: Optional[Image.Image] = None
 
-        # Ajustes
-        self.brilho = 1.0
-        self.contraste = 1.0
-        self.saturacao = 1.0
-        self.inverter = False
-
-    def carregar_imagem(self, caminho: str) -> bool:
+        # Ajustes padrão
+        self.adjustments: Dict[str, float | bool] = {
+            "brightness": 1.0,
+            "contrast": 1.0,
+            "saturation": 1.0,
+            "invert": False,
+        }
+        
+    # =====================================================================
+    # CARREGAMENTO
+    # =====================================================================
+    def load_image(self, path: str) -> bool:
+        """Carrega uma imagem do disco e copia para processamento."""
+        
         try:
-            self.imagem_original = Image.open(caminho).convert("RGB")
-            self.imagem_processada = self.imagem_original.copy()
+            self.original_image = Image.open(path).convert("RGB")
+            self.processed_image = self.original_image.copy()
             return True
         except Exception as e:
             print(f"Erro ao carregar imagem: {e}")
             return False
 
-    def set_ajuste(self, tipo: str, valor):
-        if tipo == "brilho":
-            self.brilho = valor
-        elif tipo == "contraste":
-            self.contraste = valor
-        elif tipo == "saturacao":
-            self.saturacao = valor
-        elif tipo == "inverter":
-            self.inverter = bool(valor)
+    # =====================================================================
+    # AJUSTES
+    # =====================================================================
+    def set_adjustment(self, key: str, value):
+        """Atualiza um ajuste específico e recalcula a imagem processada."""
 
-        # RECALCULA A IMAGEM COM OS NOVOS AJUSTES
-        self._aplicar_ajustes()
+        if key not in self.adjustments:
+            print(f'Ajuste inválido: {key}')
+            return
+        
+        self.adjustments[key] = value
+        # Aplica os ajustes na imagem
+        self._apply_adjustments()
 
-    def _aplicar_ajustes(self):
-        """Aplica TODOS os ajustes na imagem original e salva em processada"""
-        if not self.imagem_original:
+    def _apply_adjustments(self):
+        """Aplica todos os ajustes sobre a imagem original."""
+        if not self.original_image:
             return
 
-        img = self.imagem_original.copy()
+        img = self.original_image.copy()
 
-        # Inverte se necessário
-        if self.inverter:
+        # Inversão de cores
+        if self.adjustments["invert"]:
             img = ImageOps.invert(img.convert("L")).convert("RGB")
 
         # Aplica os 3 ajustes principais
-        img = ImageEnhance.Brightness(img).enhance(self.brilho)
-        img = ImageEnhance.Contrast(img).enhance(self.contraste)
-        img = ImageEnhance.Color(img).enhance(self.saturacao)
+        img = ImageEnhance.Brightness(img).enhance(self.adjustments["brightness"])
+        img = ImageEnhance.Contrast(img).enhance(self.adjustments["contrast"])
+        img = ImageEnhance.Color(img).enhance(self.adjustments["saturation"])
 
-        # SALVA A IMAGEM JÁ AJUSTADA
-        self.imagem_processada = img
+        # Salva a imagem já ajustada
+        self.processed_image = img
 
-    def converter_imagem(
+    # =====================================================================
+    # ASCII ART
+    # =====================================================================
+    def to_ascii(
         self,
-        chars: chr="@%#*+=-:. "[::-1],
-        largura: int = 90
-) -> str:
-        if not self.imagem_processada:
+        charset: str="@%#*+=-:. ",
+        width: int = 90
+        ) -> str:
+        
+        """Converte a imagem processada para ASCII Art."""
+        
+        if not self.processed_image:
             return "Nenhuma imagem carregada"
 
-        # USA A IMAGEM JÁ COM AJUSTES APLICADOS
-        img_cinza = self.imagem_processada.convert("L")
+        # Converte a imagem para escala de cinza
+        img_gray = self.processed_image.convert("L")
         
+        # Calcula height mantendo proporção
+        ratio = img_gray.height / img_gray.width
+        height = int(width * ratio * 0.55)
 
-        # Mantém proporção
-        ratio = img_cinza.height / img_cinza.width
-        altura = int(largura * ratio * 0.55)
+        # Ajusta charset
+        charset = charset[::-1]
+        
+        # Redimensiona
+        img_gray = img_gray.resize((width, height), Image.Resampling.LANCZOS)
+        pixels = img_gray.getdata()
 
-        chars = chars[::-1]
-        img_cinza = img_cinza.resize((largura, altura), Image.Resampling.LANCZOS)
-        pixels = img_cinza.getdata()
+        # Constrói ASCII
+        scale = len(charset) - 1
+        ascii_pixels  = "".join(charset[pixel * scale // 255] for pixel in pixels)
+        return "\n".join(ascii_pixels[i:i+width] for i in range(0, len(ascii_pixels), width))
 
-        ascii_str = "".join(chars[pixel * (len(chars)-1) // 255] for pixel in pixels)
-        return "\n".join(ascii_str[i:i+largura] for i in range(0, len(ascii_str), largura))
-
+    # =====================================================================
+    # RESET
+    # =====================================================================
     def reset(self):
-        self.brilho = self.contraste = self.saturacao = 1.0
-        self.inverter = False
-        if self.imagem_original:
-            self.imagem_processada = self.imagem_original.copy()
+        """Restaura ajustes e imagem processada ao estado original."""
+        
+        self.adjustments.update({
+            "brightness": 1.0,
+            "contrast": 1.0,
+            "saturation": 1.0,
+            "invert": False,
+        })
+        
+        if self.original_image:
+            self.processed_image = self.original_image.copy()

@@ -155,7 +155,7 @@
                 <number>8</number>
                </property>
                <item>
-                <widget class="QWidget" name="wdgFileSelector" native="true">
+                <widget class="QWidget" name="wdgOpenFile" native="true">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1460,24 +1460,20 @@ QRadioButton::indicator:hover {
                   <number>16</number>
                  </property>
                  <item>
-                  <widget class="QPushButton" name="btnConverter">
+                  <widget class="QPushButton" name="pushButton_8">
                    <property name="minimumSize">
                     <size>
-                     <width>190</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>16777215</width>
+                     <width>180</width>
                      <height>34</height>
                     </size>
                    </property>
                    <property name="font">
                     <font>
-                     <pointsize>10</pointsize>
                      <fontweight>DemiBold</fontweight>
                     </font>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LayoutDirection::RightToLeft</enum>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">QPushButton{
@@ -1493,7 +1489,11 @@ QPushButton::hover{
 }</string>
                    </property>
                    <property name="text">
-                    <string>Converter</string>
+                    <string>Exportar   </string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../assets/icons/resource_icons.qrc">
+                     <normaloff>:/icons/export.svg</normaloff>:/icons/export.svg</iconset>
                    </property>
                   </widget>
                  </item>
@@ -1700,10 +1700,10 @@ QComboBox QAbstractItemView {
                   <bool>false</bool>
                  </property>
                  <property name="currentText">
-                  <string>Courier</string>
+                  <string>Courier New</string>
                  </property>
                  <property name="currentIndex">
-                  <number>3</number>
+                  <number>4</number>
                  </property>
                  <property name="frame">
                   <bool>true</bool>
@@ -1716,14 +1716,14 @@ QComboBox QAbstractItemView {
                  </property>
                  <property name="currentFont">
                   <font>
-                   <family>Courier</family>
+                   <family>Courier New</family>
                    <pointsize>10</pointsize>
                   </font>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="spnFontSize">
+                <widget class="QSpinBox" name="cmbTamanho">
                  <property name="minimumSize">
                   <size>
                    <width>78</width>
@@ -1778,15 +1778,6 @@ QSpinBox::down-arrow {
     height: 10px;
 }
 </string>
-                 </property>
-                 <property name="suffix">
-                  <string>px</string>
-                 </property>
-                 <property name="minimum">
-                  <number>6</number>
-                 </property>
-                 <property name="maximum">
-                  <number>32</number>
                  </property>
                  <property name="value">
                   <number>10</number>
@@ -1986,45 +1977,6 @@ QPushButton::hover{
                  </property>
                  <property name="orientation">
                   <enum>Qt::Orientation::Vertical</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pushButton_8">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>26</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>-1</pointsize>
-                   <fontweight>DemiBold</fontweight>
-                  </font>
-                 </property>
-                 <property name="layoutDirection">
-                  <enum>Qt::LayoutDirection::RightToLeft</enum>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton{
-	background-color: rgb(12, 90, 234);
-	border: none;
-	border-radius: 4px;
-}
-
-QPushButton::hover{
-	background-color: rgb(5, 72, 197);
-	border: none;
-	border-radius: 4px;
-}</string>
-                 </property>
-                 <property name="text">
-                  <string>Exportar   </string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../assets/icons/resource_icons.qrc">
-                   <normaloff>:/icons/export.svg</normaloff>:/icons/export.svg</iconset>
                  </property>
                 </widget>
                </item>
