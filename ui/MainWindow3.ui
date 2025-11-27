@@ -1794,7 +1794,7 @@ QSpinBox::down-arrow {
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBox">
+                <widget class="QComboBox" name="cmbTextColor">
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
@@ -1848,41 +1848,6 @@ QComboBox QAbstractItemView {
 }
 </string>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string>Branco</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Preto</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Vermelho</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Azul</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Amarelo</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Verde</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Roxo</string>
-                  </property>
-                 </item>
                 </widget>
                </item>
                <item>

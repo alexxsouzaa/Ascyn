@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
 from core.ascii_engine import AsciiEngine
-from core.text_utils import copyToClipboard, cutTextToClipboard, updateWidgetFont
+from core.text_utils import copyToClipboard, cutTextToClipboard, updateWidgetFont, setTextColor
 from PySide6.QtGui import QFont
 import sys
 import os
@@ -60,16 +60,18 @@ class MainWindow(QWidget):
         self.cmbChars      = self.ui.findChild(QComboBox,      "cmbChars")
         self.spnFontSize    = self.ui.findChild(QSpinBox,       "spnFontSize")
         self.radioInverteCores = self.ui.findChild(QRadioButton, "radioInverteCores")
+        self.cmbTextColor = self.ui.findChild(QComboBox, "cmbTextColor")
         
         # ===============================================================
-        # 4. Configuração os valores padrões é range dos sliders
+        # 4. Configuração dos valores padrões dos widgts
         # ===============================================================
+        # Define os valores iniciais do sliders
         sliders_config = {
             self.sldBrilho:     (0, 300, 100),
             self.sldContraste:  (0, 400, 100),
             self.sldSaturacao:  (0, 300, 100),
         }
-
+        # Define os valores do range minimo, maximo e padrão dos sliders
         for slider, (min_val, max_val, default) in sliders_config.items():
             if slider:
                 slider.setRange(min_val, max_val)
@@ -77,6 +79,20 @@ class MainWindow(QWidget):
                 slider.setSingleStep(5)
                 slider.setPageStep(20)
                 slider.valueChanged.connect(self.updateAsciiArt)
+        
+        # Dicionario de cores do texto da Ascii Art
+        self.text_colors = {
+            "White Classic":    "#ffffff",
+            "Matrix Green":     "#00ff41",
+            "Cyberpunk Pink":   "#ff00ff",
+            "Blood Red":        "#ff0033",
+            "Electric Blue":    "#00ffff",
+            "Neon Yellow":      "#ffff00",
+            "Toxic Purple":     "#cc00ff",
+            "Orange Fire":      "#ff6600",
+            "Acid Lime":        "#aaff00",
+            "Ice Blue":         "#00aaff"
+        }
 
         # ===============================================================
         # 5. CONFIGURAÇÕES DOS WIDGETS
@@ -96,17 +112,15 @@ class MainWindow(QWidget):
             self.btnRecortar.clicked.connect(self.cutAsciiToClipboard)
         
         # Plain Text
-        if self.pteAsciiArt:
             font = QFont("Courier", 10)          # Melhor fonte
             font.setStyleHint(QFont.Monospace)    # Força espaçamento fixo
             font.setFixedPitch(True)              # Garante alinhamento perfeito
             self.pteAsciiArt.setFont(font)
         
-        # Combox
-        self.cmbFonte.currentFontChanged.connect(lambda font: updateWidgetFont(self.pteAsciiArt, font))
+        # Combox → muda os caracteres da Ascii Art
         self.cmbChars.currentTextChanged.connect(self.updateAsciiArt)
         
-        # Radio Buttum
+        # Radio Buttum → inverter as cores
         self.radioInverteCores.clicked.connect(self.updateAsciiArt)
 
         # ComboBox → muda a família da fonte
@@ -118,12 +132,28 @@ class MainWindow(QWidget):
             )
         )
         
-        # SpinBox → muda só o tamanho
+        # SpinBox → muda o tamanho da fonte
         self.spnFontSize.valueChanged.connect(
             lambda size: updateWidgetFont(
                 widget=self.pteAsciiArt,
                 font=self.pteAsciiArt.font(),
                 size=size
+            )
+        )
+        
+        # Adiciona as cores do dicionario com combox de cores
+        self.cmbTextColor.clear()
+        for name in self.text_colors:
+            self.cmbTextColor.addItem(name)
+            
+        # Define cor padrão (opcional, mas recomendado)
+        self.cmbTextColor.setCurrentText("White Classic")
+            
+        # ComboBox → muda a cor da fonte
+        self.cmbTextColor.currentTextChanged.connect(
+            lambda name: name and setTextColor(
+                widget=self.pteAsciiArt,
+                hex_color=self.text_colors.get(name, "#ffffff")
             )
         )
                     

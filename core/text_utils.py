@@ -34,7 +34,7 @@ def copyToClipboard(texto: str, button=None) -> bool:
 # ===================================================================
 # RECORTA O CONTEÚDO ASCII PARA A ÁREA DE TRANSFERÊNCIA
 # ===================================================================     
-def cutTextToClipboard(widget, button=None):
+def cutTextToClipboard(widget, button=None) -> bool:
     """Corta o texto do widget e envia para o clipboard."""
     
     text = widget.toPlainText()
@@ -50,7 +50,7 @@ def cutTextToClipboard(widget, button=None):
     return True
 
 # ===================================================================
-# ATUALIZA A FONTE DA ASCII ART
+# ATUALIZA A FONTE+TAMANHO DA ASCII ART
 # ===================================================================    
 def updateWidgetFont(widget: QPlainTextEdit, font: QFont, size: int=10) -> bool:
     """Aplica uma fonte monoespaçada ao widget de texto."""
@@ -73,3 +73,19 @@ def updateWidgetFont(widget: QPlainTextEdit, font: QFont, size: int=10) -> bool:
     widget.viewport().update()
     
     return True
+
+# ===================================================================
+# ATUALIZA A COR DA FONTE DA ASCII ART
+# =================================================================== 
+def setTextColor(widget: QPlainTextEdit, hex_color: str = "#ffffff") -> None:
+    """Altera a cor do texto da Ascii Art."""
+    
+    if not widget:
+        return
+    
+    # Muda a cor do texto
+    widget.setStyleSheet(
+        f"QPlainTextEdit {{ color: {hex_color}; }}"
+    ) 
+    # Atualiza a vizualição
+    widget.update()
