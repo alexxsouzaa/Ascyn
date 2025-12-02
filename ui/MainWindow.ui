@@ -2793,6 +2793,9 @@ QPushButton::checked{
                   <height>26</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Alinhar à esquerda</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
 	background-color: rgb(36, 36, 36);
@@ -2838,6 +2841,9 @@ QPushButton::checked{
                   <height>26</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Alinhar no centro</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
 	background-color: rgb(36, 36, 36);
@@ -2882,6 +2888,9 @@ QPushButton::checked{
                   <width>26</width>
                   <height>26</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Alinhar à direita</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
