@@ -21,7 +21,7 @@ from core.text_utils import (
     setTextColor,
     applyTextStyle,
 )
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QShortcut, QKeySequence
 import sys
 import os
 
@@ -35,7 +35,7 @@ import core.resources  # noqa: F401
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-
+        
         # ===============================================================
         # 1. CARREGA A INTERFACE DO ARQUIVO .UI
         # ===============================================================
@@ -234,6 +234,12 @@ class MainWindow(QWidget):
                 self.updateLabelFromSlider(self.sldSaturation, self.lblSaturation, "%")
             }
         )
+        
+        # ===============================================================
+        # 11. ATALHOS GLOBAL
+        # ===============================================================
+        # Atalho para abrir a seleção de imagem
+        QShortcut(QKeySequence("Ctrl+O"), self.wdgFileSelector).activated.connect(self.selectImageFile)
 
     # ===================================================================
     # EVENT FILTER – Abrir arquivo

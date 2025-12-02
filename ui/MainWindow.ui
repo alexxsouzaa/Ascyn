@@ -164,6 +164,9 @@
              <property name="focusPolicy">
               <enum>Qt::FocusPolicy::ClickFocus</enum>
              </property>
+             <property name="toolTip">
+              <string>Carregar Imagem (Ctrl+O)</string>
+             </property>
              <property name="styleSheet">
               <string notr="true">QWidget {
     
@@ -2606,15 +2609,6 @@ QComboBox::down-arrow:on {
     image: url(:/icons/arrow-up.svg);
 }</string>
                 </property>
-                <item>
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../assets/icons/resource_icons.qrc">
-                   <normaloff>:/icons/ascyn_logo_16x16.svg</normaloff>:/icons/ascyn_logo_16x16.svg</iconset>
-                 </property>
-                </item>
                </widget>
               </item>
               <item>
@@ -2663,7 +2657,7 @@ QComboBox::down-arrow:on {
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Bold</string>
+                 <string>Bold (Ctrl+B)</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
@@ -2718,7 +2712,7 @@ QPushButton::checked{
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Italic</string>
+                 <string>Italic (Ctrl+I)</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
@@ -2966,7 +2960,7 @@ QPushButton::checked{
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Copiar</string>
+                 <string>Copiar (Ctrl+C)</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
@@ -2989,6 +2983,9 @@ QPushButton::checked{
                   <height>16</height>
                  </size>
                 </property>
+                <property name="shortcut">
+                 <string>Ctrl+C</string>
+                </property>
                </widget>
               </item>
               <item>
@@ -3006,7 +3003,7 @@ QPushButton::checked{
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Cortar</string>
+                 <string>Cortar (Ctrl+X)</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
@@ -3028,6 +3025,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="shortcut">
+                 <string>Ctrl+X</string>
                 </property>
                </widget>
               </item>
@@ -3077,7 +3077,7 @@ QPushButton::checked{
                  </size>
                 </property>
                 <property name="toolTip">
-                 <string>Excluir</string>
+                 <string>Excluir (Del)</string>
                 </property>
                 <property name="accessibleName">
                  <string>Excluir</string>
@@ -3102,6 +3102,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="shortcut">
+                 <string>Del</string>
                 </property>
                </widget>
               </item>
