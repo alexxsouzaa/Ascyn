@@ -2717,6 +2717,11 @@ QPushButton::checked{
 	border: none;
 	border-radius: 4px;
 }
+
+QPushButton::checked{
+	background-color: rgb(28, 28, 28);
+	border: 1px solid rgb(12, 90, 234)
+}
 </string>
                 </property>
                 <property name="text">
@@ -2731,6 +2736,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2785,6 +2793,11 @@ QPushButton::checked{
 	border: none;
 	border-radius: 4px;
 }
+
+QPushButton::checked{
+	background-color: rgb(28, 28, 28);
+	border: 1px solid rgb(12, 90, 234)
+}
 </string>
                 </property>
                 <property name="text">
@@ -2799,6 +2812,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2822,6 +2838,11 @@ QPushButton::checked{
 	border: none;
 	border-radius: 4px;
 }
+
+QPushButton::checked{
+	background-color: rgb(28, 28, 28);
+	border: 1px solid rgb(12, 90, 234)
+}
 </string>
                 </property>
                 <property name="text">
@@ -2836,6 +2857,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2859,6 +2883,11 @@ QPushButton::checked{
 	border: none;
 	border-radius: 4px;
 }
+
+QPushButton::checked{
+	background-color: rgb(28, 28, 28);
+	border: 1px solid rgb(12, 90, 234)
+}
 </string>
                 </property>
                 <property name="text">
@@ -2873,6 +2902,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>

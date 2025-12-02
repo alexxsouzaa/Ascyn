@@ -19,7 +19,7 @@ from core.text_utils import (
     cutTextToClipboard,
     updateWidgetFont,
     setTextColor,
-    setTextBold
+    applyTextStyle,
 )
 from PySide6.QtGui import QFont
 import sys
@@ -81,6 +81,7 @@ class MainWindow(QWidget):
         self.lblContrast = self.ui.findChild(QLabel, "lblContrast")
         self.lblBrightness = self.ui.findChild(QLabel, "lblBrightness")
         self.btnBoldText = self.ui.findChild(QPushButton, "btnBoldText")
+        self.btnItalicText = self.ui.findChild(QPushButton, "btnItalicText")
 
         # ===============================================================
         # 4. Configuração dos valores padrões dos widgts
@@ -102,7 +103,7 @@ class MainWindow(QWidget):
                 slider.valueChanged.connect(self.updateAsciiArt)
 
         # ===============================================================
-        # 4. Atualiza os valores das labels dos sliders
+        # 5. Atualiza os valores das labels dos sliders
         # ===============================================================
         self.lblBrightness.setText(f"{str(self.sldBrightness.value())}%")
         self.lblContrast.setText(f"{str(self.sldContrast.value())}%")
@@ -124,39 +125,59 @@ class MainWindow(QWidget):
         }
 
         # ===============================================================
-        # 5. CONFIGURAÇÕES DOS WIDGETS
+        # 6. CONFIGURAÇÕES DOS WIDGETS
         # ===============================================================
         if self.wdgFileSelector:
             self.wdgFileSelector.setCursor(Qt.PointingHandCursor)
             self.wdgFileSelector.installEventFilter(self)
 
-        # Botões
-        if self.btn_converter:
-            self.btn_converter.clicked.connect(self.updateAsciiArt)
+        # ===============================================================
+        # 7. CONFIGURAÇÕES DOS BOTÕES
+        # ===============================================================
+        # Botão de resetar os ajustes de imagem
         if self.btnResetAdjustments:
             self.btnResetAdjustments.clicked.connect(self.resetAdjustments)
+        # Botão de copiar a Ascii Art
         if self.btnCopy:
-            self.btnCopy.clicked.connect(self.copyAsciiToClipboard)
+            self.btnCopy.clicked.connect(
+                lambda: copyToClipboard(self.pteAsciiArt.toPlainText(), self.btnCopy)
+            )
+        # Botão de cortar a Ascii Art
         if self.btnCut:
-            self.btnCut.clicked.connect(self.cutAsciiToClipboard)
-            
+            self.btnCut.clicked.connect(
+                lambda: cutTextToClipboard(self.pteAsciiArt, self.btnCut)
+            )
+        # Botão de peso Bold da fonte
         if self.btnBoldText:
             self.btnBoldText.toggled.connect(
-                lambda: setTextBold(self.btnBoldText, self.pteAsciiArt)
+                lambda: applyTextStyle(
+                    self.pteAsciiArt, self.btnBoldText, self.btnItalicText
+                )
             )
-
-            # Plain Text
-            font = QFont("Courier", 10)  # Melhor fonte
-            font.setStyleHint(QFont.Monospace)  # Força espaçamento fixo
-            font.setFixedPitch(True)  # Garante alinhamento perfeito
-            self.pteAsciiArt.setFont(font)
-
-        # Combox → muda os caracteres da Ascii Art
-        self.cmbChars.currentTextChanged.connect(self.updateAsciiArt)
+        # Botão de peso Italic da fonte
+        if self.btnItalicText:
+            self.btnItalicText.toggled.connect(
+                lambda: applyTextStyle(
+                    self.pteAsciiArt, self.btnBoldText, self.btnItalicText
+                )
+            )
 
         # Radio Buttum → inverter as cores
         self.chkInverteCores.clicked.connect(self.updateAsciiArt)
 
+        # ===============================================================
+        # 8. CONFIGURAÇÕES DO PLAIN TEXT
+        # ===============================================================
+        font = QFont("Courier", 10)  # Melhor fonte
+        font.setStyleHint(QFont.Monospace)  # Força espaçamento fixo
+        font.setFixedPitch(True)  # Garante alinhamento perfeito
+        self.pteAsciiArt.setFont(font)
+
+        # ===============================================================
+        # 9. CONFIGURAÇÕES DOS COMBOXS E SPINBOXS
+        # ===============================================================
+        # Combox → muda os caracteres da Ascii Art
+        self.cmbChars.currentTextChanged.connect(self.updateAsciiArt)
         # ComboBox → muda a família da fonte
         self.cmbFonte.currentFontChanged.connect(
             lambda font: font
@@ -166,7 +187,18 @@ class MainWindow(QWidget):
                 size=self.spnFontSize.value() if self.spnFontSize else 10,
             )
         )
+        # Combox → Adiciona as cores do dicionario de cores no combox de cores
+        self.cmbTextColor.clear()
+        for name in self.text_colors:
+            self.cmbTextColor.addItem(name)
+        # Define cor padrão
+        self.cmbTextColor.setCurrentText("White Classic")
 
+        # ComboBox → muda a cor da fonte
+        self.cmbTextColor.currentTextChanged.connect(
+            lambda name: name
+            and setTextColor(self.pteAsciiArt, self.text_colors.get(name, "#ffffff"))
+        )
         # SpinBox → muda o tamanho da fonte
         self.spnFontSize.valueChanged.connect(
             lambda size: updateWidgetFont(
@@ -174,22 +206,9 @@ class MainWindow(QWidget):
             )
         )
 
-        # Adiciona as cores do dicionario com combox de cores
-        self.cmbTextColor.clear()
-        for name in self.text_colors:
-            self.cmbTextColor.addItem(name)
-
-        # Define cor padrão (opcional, mas recomendado)
-        self.cmbTextColor.setCurrentText("White Classic")
-
-        # ComboBox → muda a cor da fonte
-        self.cmbTextColor.currentTextChanged.connect(
-            lambda name: name
-            and setTextColor(
-                widget=self.pteAsciiArt, hex_color=self.text_colors.get(name, "#ffffff")
-            )
-        )
-
+        # ===============================================================
+        # 10. CONFIGURAÇÕES DOS SLIDERS
+        # ===============================================================
         # Slider → Atualiza o texto do label do slider de escala
         self.sldWidth.valueChanged.connect(
             lambda value: (
@@ -197,21 +216,18 @@ class MainWindow(QWidget):
                 self.updateLabelFromSlider(self.sldWidth, self.lblWidthValue, " cols"),
             )
         )
-
         # Slider → Atualiza o texto do label do slider de Brilho
         self.sldBrightness.valueChanged.connect(
             lambda value: (
                 self.updateLabelFromSlider(self.sldBrightness, self.lblBrightness, "%")
             )
         )
-
         # Slider → Atualiza o texto do label do slider de Contraste
         self.sldContrast.valueChanged.connect(
             lambda value: (
                 self.updateLabelFromSlider(self.sldContrast, self.lblContrast, "%")
             )
         )
-
         # Slider → Atualiza o texto do label do slider de Saturação
         self.sldSaturation.valueChanged.connect(
             lambda value: {
@@ -303,25 +319,17 @@ class MainWindow(QWidget):
         self.updateAsciiArt()
 
     # ===================================================================
-    # COPIA O CONTEÚDO ASCII PARA A ÁREA DE TRANSFERÊNCIA
+    # ATUALIZA O TEXTO DOS QLABELS
     # ===================================================================
-    def copyAsciiToClipboard(self):
-        asciiText = self.pteAsciiArt.toPlainText()
-        # Nada para copiar
-        if not asciiText.strip():
+    def updateLabelFromSlider(
+        self, slider: QSlider, label: QLabel, suffix: str = ""
+    ) -> None:
+        """Atualiza o texto de uma QLabel com o valor atual de um QSlider."""
+
+        if not slider or not label:
             return
 
-        copyToClipboard(asciiText, self.btnCopy)
-
-    # ===================================================================
-    # RECORTA O CONTEÚDO ASCII PARA A ÁREA DE TRANSFERÊNCIA
-    # ===================================================================
-    def cutAsciiToClipboard(self):
-        cutTextToClipboard(self.pteAsciiArt, self.btnCut)
-
-    def updateLabelFromSlider(
-        self, slider=QSlider, label=QLabel, suffix: str = ""
-    ) -> None:
+        # Pega o valor do slider
         value = slider.value()
-        label.clear()
+        # Adiciona o novo texto na label
         label.setText(f"{value}{suffix}")

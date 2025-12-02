@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QPlainTextEdit, QPushButton
 # ===================================================================
 # COPIA O CONTEÚDO ASCII PARA A ÁREA DE TRANSFERÊNCIA
 # ===================================================================
-def copyToClipboard(texto: str, button=None) -> bool:
+def copyToClipboard(text: str, button=None) -> bool:
     """
     Copia o texto fornecido para a área de transferência.
     Se houver um botão, altera temporariamente seu texto para indicar sucesso.
@@ -17,12 +17,12 @@ def copyToClipboard(texto: str, button=None) -> bool:
         False se o texto estiver vazio.
     """
 
-    if not texto.strip():
+    if not text.strip():
         QMessageBox.information(None, "Ascyn", "Nada para copiar!")
         return False
 
     # Copia para o clipboard
-    QApplication.clipboard().setText(texto)
+    QApplication.clipboard().setText(text)
 
     # Feedback visual no botão
     if button:
@@ -62,9 +62,12 @@ def updateWidgetFont(widget: QPlainTextEdit, font: QFont, size: int = 10) -> boo
         print("Widget inválido.")
         return False
 
+    # Copia a fonte
     newFont = QFont(font)
-    newFont.setPointSize(size)  # Define o tamanho da fonte
+    # Define o tamanho da fonte
+    newFont.setPointSize(size)
     newFont.setFixedPitch(True)
+    # Força espaçamento fixo
     newFont.setStyleHint(QFont.Monospace)
     newFont.setHintingPreference(QFont.PreferFullHinting)
 
@@ -81,26 +84,35 @@ def updateWidgetFont(widget: QPlainTextEdit, font: QFont, size: int = 10) -> boo
 # ===================================================================
 # ATUALIZA A COR DA FONTE DA ASCII ART
 # ===================================================================
-def setTextColor(widget: QPlainTextEdit, hex_color: str = "#ffffff") -> None:
+def setTextColor(text: QPlainTextEdit, hex_color: str = "#ffffff") -> None:
     """Altera a cor do texto da Ascii Art."""
 
-    if not widget:
+    if not text:
         return
 
     # Muda a cor do texto
-    widget.setStyleSheet(f"QPlainTextEdit {{ color: {hex_color}; }}")
+    text.setStyleSheet(f"QPlainTextEdit {{ color: {hex_color}; }}")
     # Atualiza a vizualição
-    widget.update()
-
-
-def setTextBold(button: QPushButton, text: QPlainTextEdit) -> None:
-    if button.isChecked():
-        text.setStyleSheet("""QPlainTextEdit {font-weight: bold;}""")
-    else:
-        text.setStyleSheet("""QPlainTextEdit {font-weight: normal;}""")
-        
-        
-    # Atualiza o widget
     text.update()
-    # Força a atualização do widget
+
+
+# ===================================================================
+# Muda o peso da fonte para bold ou/e italic
+# ===================================================================
+def applyTextStyle(
+    text: QPlainTextEdit, bold: QPushButton, italic: QPushButton
+) -> None:
+    """Altera o peso da fonte em bold e italic."""
+
+    # Copia a fonte
+    font = text.font()
+    # Aplica o bold no texto
+    if bold is not None:
+        font.setBold(bold.isChecked())
+    # Aplica o italic no texto
+    if italic is not None:
+        font.setItalic(italic.isChecked())
+    # Aplica as auterações na fonte
+    text.setFont(font)
+    # Atualiza a vizualição
     text.viewport().update()
