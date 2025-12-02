@@ -1,5 +1,14 @@
 <RCC>
   <qresource prefix="/icons">
+    <file>infor.svg</file>
+    <file>delete.svg</file>
+    <file>cut.svg</file>
+    <file>copy.svg</file>
+    <file>align-center.svg</file>
+    <file>align-right.svg</file>
+    <file>align-left.svg</file>
+    <file>italic.svg</file>
+    <file>bold.svg</file>
     <file>export.svg</file>
     <file>reset.svg</file>
     <file>folder.png</file>

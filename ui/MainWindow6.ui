@@ -1705,10 +1705,10 @@ QComboBox QAbstractItemView {
                   <bool>false</bool>
                  </property>
                  <property name="currentText">
-                  <string>Courier</string>
+                  <string>Courier New</string>
                  </property>
                  <property name="currentIndex">
-                  <number>3</number>
+                  <number>4</number>
                  </property>
                  <property name="maxVisibleItems">
                   <number>30</number>
@@ -1724,7 +1724,7 @@ QComboBox QAbstractItemView {
                  </property>
                  <property name="currentFont">
                   <font>
-                   <family>Courier</family>
+                   <family>Courier New</family>
                    <pointsize>10</pointsize>
                   </font>
                  </property>
@@ -2038,11 +2038,17 @@ QPushButton::hover{
                    <pointsize>10</pointsize>
                   </font>
                  </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LayoutDirection::LeftToRight</enum>
+                 </property>
                  <property name="styleSheet">
                   <string notr="true">QPlainTextEdit {
         selection-background-color: #6B9FFF;   /* ← fundo da seleção */
         selection-color: black;                /* ← texto selecionado */
     }</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
                  </property>
                  <property name="verticalScrollBarPolicy">
                   <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>

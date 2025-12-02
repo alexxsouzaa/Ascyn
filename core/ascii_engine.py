@@ -1,6 +1,7 @@
 # core/ascii_engine.py
 from PIL import Image, ImageEnhance, ImageOps
 from typing import Optional, Dict
+from PySide6.QtWidgets import QSlider
 
 class AsciiEngine:
     """Engine responsável por carregar imagem, aplicar ajustes e gerar ASCII art."""
@@ -70,7 +71,7 @@ class AsciiEngine:
     def to_ascii(
         self,
         charset: str="@%#*+=-:. ",
-        width: int = 90
+        width: QSlider = 120
         ) -> str:
         
         """Converte a imagem processada para ASCII Art."""
