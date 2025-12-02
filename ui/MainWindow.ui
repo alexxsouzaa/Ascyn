@@ -2662,6 +2662,9 @@ QComboBox::down-arrow:on {
                   <height>26</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Bold</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
 	background-color: rgb(36, 36, 36);
@@ -2689,6 +2692,9 @@ QPushButton::checked{
                   <height>16</height>
                  </size>
                 </property>
+                <property name="shortcut">
+                 <string>Ctrl+B</string>
+                </property>
                 <property name="checkable">
                  <bool>true</bool>
                 </property>
@@ -2710,6 +2716,9 @@ QPushButton::checked{
                   <width>26</width>
                   <height>26</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Italic</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
@@ -2736,6 +2745,9 @@ QPushButton::checked{
                   <width>16</width>
                   <height>16</height>
                  </size>
+                </property>
+                <property name="shortcut">
+                 <string>Ctrl+I</string>
                 </property>
                 <property name="checkable">
                  <bool>true</bool>
@@ -2953,6 +2965,9 @@ QPushButton::checked{
                   <height>26</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Copiar</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
 	background-color: rgb(36, 36, 36);
@@ -2989,6 +3004,9 @@ QPushButton::checked{
                   <width>26</width>
                   <height>26</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Cortar</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
@@ -3057,6 +3075,12 @@ QPushButton::checked{
                   <width>26</width>
                   <height>26</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Excluir</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Excluir</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton{
