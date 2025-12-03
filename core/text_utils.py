@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QMessageBox, QApplication
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QPlainTextEdit, QPushButton
 
@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QPlainTextEdit, QPushButton
 # ===================================================================
 # COPIA O CONTEÚDO ASCII PARA A ÁREA DE TRANSFERÊNCIA
 # ===================================================================
-def copyToClipboard(text: str, button=None) -> bool:
+def copyToClipboard(text: str, button: QPushButton) -> bool:
     """
     Copia o texto fornecido para a área de transferência.
     Se houver um botão, altera temporariamente seu texto para indicar sucesso.
@@ -18,7 +18,7 @@ def copyToClipboard(text: str, button=None) -> bool:
     """
 
     if not text.strip():
-        QMessageBox.information(None, "Ascyn", "Nada para copiar!")
+        # QMessageBox.information(None, "Ascyn", "Nada para copiar!")
         return False
 
     # Copia para o clipboard
@@ -26,9 +26,23 @@ def copyToClipboard(text: str, button=None) -> bool:
 
     # Feedback visual no botão
     if button:
-        texto_original = button.text()
-        button.setText("Copiado!")
-        QTimer.singleShot(1500, lambda: button.setText(texto_original))
+        button.setStyleSheet("""
+    QPushButton {
+        background-color: rgb(28, 28, 28);
+        border: 1px solid rgb(12, 90, 234);
+        border-radius: 4px;
+    }
+""")
+        QTimer.singleShot(
+            200,
+            lambda: button.setStyleSheet("""
+    QPushButton {
+        background-color: rgb(36, 36, 36);
+        border: none;
+        border-radius: 4px;
+    }
+"""),
+        )
 
     return True
 
@@ -41,7 +55,7 @@ def cutTextToClipboard(widget, button=None) -> bool:
 
     text = widget.toPlainText()
     if not text.strip():
-        QMessageBox.information(None, "Ascyn", "Nada para recortar!")
+        # QMessageBox.information(None, "Ascyn", "Nada para recortar!")
         return False
 
     # Copia o texto para o clipboard.
@@ -115,4 +129,33 @@ def applyTextStyle(
     # Aplica as auterações na fonte
     text.setFont(font)
     # Atualiza a vizualição
+    text.viewport().update()
+
+
+# ===================================================================
+# ALINHA O TEXTO DO QPlainTextEdit
+# ===================================================================
+def setAlignmentAscii(text: QPlainTextEdit, button: QPushButton) -> None:
+    """Altera o alinhamento do texto no QPlainTextEdit."""
+
+    # Mapeia o nome dos botões para o tipo de alinhamento
+    alignment_map = {
+        "btnAlignLeft": Qt.AlignLeft,
+        "btnAlignCenter": Qt.AlignCenter,
+        "btnAlignRight": Qt.AlignRight,
+    }
+
+    # Identifica qual alinhamento usar com base no botão clicado
+    alignment = alignment_map.get(button.objectName(), Qt.AlignLeft)
+
+    # Obtém as configurações atuais do documento
+    opt = text.document().defaultTextOption()
+
+    # Define o novo alinhamento
+    opt.setAlignment(alignment)
+
+    # Aplica as configurações de volta ao documento
+    text.document().setDefaultTextOption(opt)
+
+    # Redesenha o conteúdo para aplicar visualmente o novo alinhamento
     text.viewport().update()

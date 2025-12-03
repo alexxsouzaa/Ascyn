@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QComboBox,
     QCheckBox,
+    QButtonGroup,
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
@@ -20,6 +21,7 @@ from core.text_utils import (
     updateWidgetFont,
     setTextColor,
     applyTextStyle,
+    setAlignmentAscii,
 )
 from PySide6.QtGui import QFont, QShortcut, QKeySequence
 import sys
@@ -35,7 +37,7 @@ import core.resources  # noqa: F401
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        
+
         # ===============================================================
         # 1. CARREGA A INTERFACE DO ARQUIVO .UI
         # ===============================================================
@@ -82,6 +84,9 @@ class MainWindow(QWidget):
         self.lblBrightness = self.ui.findChild(QLabel, "lblBrightness")
         self.btnBoldText = self.ui.findChild(QPushButton, "btnBoldText")
         self.btnItalicText = self.ui.findChild(QPushButton, "btnItalicText")
+        self.btnAlignLeft = self.ui.findChild(QPushButton, "btnAlignLeft")
+        self.btnAlignCenter = self.ui.findChild(QPushButton, "btnAlignCenter")
+        self.btnAlignRight = self.ui.findChild(QPushButton, "btnAlignRight")
 
         # ===============================================================
         # 4. Configuração dos valores padrões dos widgts
@@ -91,7 +96,7 @@ class MainWindow(QWidget):
             self.sldBrightness: (0, 300, 120),
             self.sldContrast: (0, 400, 120),
             self.sldSaturation: (0, 300, 120),
-            self.sldWidth: (40, 300, 120),
+            self.sldWidth: (40, 300, 90),
         }
         # Define os valores do range minimo, maximo e padrão dos sliders
         for slider, (min_val, max_val, default) in sliders_config.items():
@@ -166,6 +171,34 @@ class MainWindow(QWidget):
         self.chkInverteCores.clicked.connect(self.updateAsciiArt)
 
         # ===============================================================
+        # 8. CONFIGURAÇÃO DO GRUPO DE BOTÕES DE ALINHAMENTO
+        # ===============================================================
+
+        # Torna os botões selecionáveis (estado checked/focused)
+        self.btnAlignLeft.setCheckable(True)
+        self.btnAlignCenter.setCheckable(True)
+        self.btnAlignRight.setCheckable(True)
+
+        # Cria um grupo para controlar a exclusividade entre os botões
+        self.alignGroup = QButtonGroup(self)
+        self.alignGroup.setExclusive(True)  # apenas um pode estar marcado ao mesmo tempo
+
+        # Adiciona os botões ao grupo
+        self.alignGroup.addButton(self.btnAlignLeft)
+        self.alignGroup.addButton(self.btnAlignCenter)
+        self.alignGroup.addButton(self.btnAlignRight)
+
+        # Define o alinhamento padrão (esquerda)
+        self.btnAlignLeft.setChecked(True)
+
+        # Conecta o evento de clique de qualquer botão do grupo
+        # Quando um botão for clicado, seu estado será atualizado automaticamente
+        # e a função setAlignmentAscii aplicará o novo alinhamento ao texto
+        self.alignGroup.buttonClicked.connect(
+            lambda btn: setAlignmentAscii(self.pteAsciiArt, btn)
+        )
+
+        # ===============================================================
         # 8. CONFIGURAÇÕES DO PLAIN TEXT
         # ===============================================================
         font = QFont("Courier", 10)  # Melhor fonte
@@ -234,12 +267,14 @@ class MainWindow(QWidget):
                 self.updateLabelFromSlider(self.sldSaturation, self.lblSaturation, "%")
             }
         )
-        
+
         # ===============================================================
         # 11. ATALHOS GLOBAL
         # ===============================================================
         # Atalho para abrir a seleção de imagem
-        QShortcut(QKeySequence("Ctrl+O"), self.wdgFileSelector).activated.connect(self.selectImageFile)
+        QShortcut(QKeySequence("Ctrl+O"), self.wdgFileSelector).activated.connect(
+            self.selectImageFile
+        )
 
     # ===================================================================
     # EVENT FILTER – Abrir arquivo
@@ -339,3 +374,8 @@ class MainWindow(QWidget):
         value = slider.value()
         # Adiciona o novo texto na label
         label.setText(f"{value}{suffix}")
+
+    def centralizar_ascii(self):
+        options = self.pteAsciiArt.document().defaultTextOption()
+        options.setAlignment(Qt.AlignRight)
+        self.pteAsciiArt.document().setDefaultTextOption(options)
