@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icons">
+    <file>grid.png</file>
+    <file>file_icon.svg</file>
     <file>infor.svg</file>
     <file>delete.svg</file>
     <file>cut.svg</file>
