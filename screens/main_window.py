@@ -415,14 +415,6 @@ class MainWindow(QWidget):
         # Adiciona o novo texto na label
         label.setText(f"{value}{suffix}")
 
-    # ===================================================================
-    # *Deletar
-    # ===================================================================
-    def centralizar_ascii(self):
-        options = self.pteAsciiArt.document().defaultTextOption()
-        options.setAlignment(Qt.AlignRight)
-        self.pteAsciiArt.document().setDefaultTextOption(options)
-
     def openDeletePopup(self):
         self.popup = PopupDelete(self)
         self.popup.confirmed.connect(self.deleteAsciiArt)
