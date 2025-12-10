@@ -25,7 +25,7 @@ from core.text_utils import (
     applyTextStyle,
     setAlignmentAscii
 )
-from PySide6.QtGui import QFont, QShortcut, QKeySequence, QMouseEvent, QColor
+from PySide6.QtGui import QFont, QShortcut, QKeySequence, QMouseEvent, QColor, QIcon, QPixmap, QPainter
 from dialogs.popup_delete import PopupDelete
 import sys
 import os
@@ -232,18 +232,39 @@ class MainWindow(QWidget):
                 size=self.spnFontSize.value() if self.spnFontSize else 10,
             )
         )
-        # Combox → Adiciona as cores do dicionario de cores no combox de cores
+        # ComboBox → adiciona as cores do dicionário
         self.cmbTextColor.clear()
-        for name in self.text_colors:
-            self.cmbTextColor.addItem(name)
-        # Define cor padrão
-        self.cmbTextColor.setCurrentText("White Classic")
 
-        # ComboBox → muda a cor da fonte
-        self.cmbTextColor.currentTextChanged.connect(
-            lambda name: name
-            and setTextColor(self.pteAsciiArt, self.text_colors.get(name, "#ffffff"))
+        for name, hex_color in self.text_colors.items():
+            # Ícone quadrado (12x12)
+            pixmap = QPixmap(12, 12)
+            pixmap.fill(QColor(hex_color))
+            icon = QIcon(pixmap)
+
+            # Adiciona somente o ícone
+            self.cmbTextColor.addItem(icon, "")
+
+            index = self.cmbTextColor.count() - 1
+
+            # Armazena o HEX
+            self.cmbTextColor.setItemData(index, hex_color, Qt.UserRole)
+
+            # Tooltip com nome da cor 🔥
+            self.cmbTextColor.setItemData(index, name, Qt.ToolTipRole)
+
+        # Seleciona automaticamente "Black Classic" como default
+        default_hex = self.text_colors["Black Classic"]
+        default_index = list(self.text_colors.values()).index(default_hex)
+        self.cmbTextColor.setCurrentIndex(default_index)
+
+        # Quando troca a cor → aplicar no texto
+        self.cmbTextColor.currentIndexChanged.connect(
+            lambda: setTextColor(
+                self.pteAsciiArt,
+                self.cmbTextColor.currentData(Qt.UserRole)
+            )
         )
+
         # SpinBox → muda o tamanho da fonte
         self.spnFontSize.valueChanged.connect(
             lambda size: updateWidgetFont(

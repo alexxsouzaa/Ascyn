@@ -2973,24 +2973,12 @@ QComboBox::down-arrow:on {
     image: url(:/icons/arrow-up.svg);
 }</string>
                 </property>
+                <property name="currentIndex">
+                 <number>-1</number>
+                </property>
                 <property name="labelDrawingMode">
                  <enum>QComboBox::LabelDrawingMode::UseStyle</enum>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>Branco</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Preto</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Azul</string>
-                 </property>
-                </item>
                </widget>
               </item>
               <item>
