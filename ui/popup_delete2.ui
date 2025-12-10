@@ -1139,7 +1139,7 @@ QLabel {
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="wdgAsciiTools">
+         <widget class="QFrame" name="frame_8">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -2012,7 +2012,7 @@ QPushButton::hover{
             </widget>
            </item>
            <item>
-            <widget class="QWidget" name="wdgAscii" native="true">
+            <widget class="QWidget" name="widget_19" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                <horstretch>0</horstretch>
@@ -3551,7 +3551,7 @@ QPushButton::hover{
 QPushButton::hover{
 	background-color: rgb(12, 90, 234);
 	border: none;
-	border-radius: 12px;
+	border-radius: 4px;
 	padding: 4px 16px 4px 16px;
 }
 </string>
@@ -3954,7 +3954,133 @@ a = 97
 1 = 49
 O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
 O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
-Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.</string>
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+A = 65
+a = 97
+1 = 49
+O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+
+
+
+
+</string>
              </property>
              <property name="textInteractionFlags">
               <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>

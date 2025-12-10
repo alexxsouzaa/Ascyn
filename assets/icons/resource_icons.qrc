@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/icons">
-    <file>grid.png</file>
+    <file>img.svg</file>
     <file>file_icon.svg</file>
     <file>infor.svg</file>
     <file>delete.svg</file>
@@ -22,5 +22,8 @@
     <file>close.svg</file>
     <file>maximize.svg</file>
     <file>minimize.svg</file>
+  </qresource>
+  <qresource prefix="images">
+    <file>grid.png</file>
   </qresource>
 </RCC>

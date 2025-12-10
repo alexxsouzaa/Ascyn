@@ -11,9 +11,11 @@ from PySide6.QtWidgets import (
     QComboBox,
     QCheckBox,
     QButtonGroup,
+    QGraphicsDropShadowEffect,
+    QFrame
 )
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo
+from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo, Signal
 from core.ascii_engine import AsciiEngine
 from core.text_utils import (
     copyToClipboard,
@@ -21,9 +23,10 @@ from core.text_utils import (
     updateWidgetFont,
     setTextColor,
     applyTextStyle,
-    setAlignmentAscii,
+    setAlignmentAscii
 )
-from PySide6.QtGui import QFont, QShortcut, QKeySequence
+from PySide6.QtGui import QFont, QShortcut, QKeySequence, QMouseEvent, QColor
+from dialogs.popup_delete import PopupDelete
 import sys
 import os
 
@@ -42,7 +45,7 @@ class MainWindow(QWidget):
         # 1. CARREGA A INTERFACE DO ARQUIVO .UI
         # ===============================================================
         loader = QUiLoader()
-        ui_file = QFile("ui/MainWindow.ui")
+        ui_file = QFile("ui/MainWindow2.ui")
         ui_file.open(QFile.ReadOnly)
         self.ui = loader.load(ui_file, self)
         ui_file.close()
@@ -87,6 +90,10 @@ class MainWindow(QWidget):
         self.btnAlignLeft = self.ui.findChild(QPushButton, "btnAlignLeft")
         self.btnAlignCenter = self.ui.findChild(QPushButton, "btnAlignCenter")
         self.btnAlignRight = self.ui.findChild(QPushButton, "btnAlignRight")
+        self.btnDelete = self.ui.findChild(QPushButton, "btnDelete")
+        self.wdgFileSelectorInfor = self.ui.findChild(QWidget, "wdgFileSelectorInfor")
+        self.frmAsciiEditor = self.ui.findChild(QFrame, "frmAsciiEditor")
+        self.wdgAsciiTools = self.ui.findChild(QWidget, "wdgAsciiTools")
 
         # ===============================================================
         # 4. Configuração dos valores padrões dos widgts
@@ -127,6 +134,7 @@ class MainWindow(QWidget):
             "Orange Fire": "#ff6600",
             "Acid Lime": "#aaff00",
             "Ice Blue": "#00aaff",
+            "Black Classic": "000000",
         }
 
         # ===============================================================
@@ -167,6 +175,8 @@ class MainWindow(QWidget):
                 )
             )
 
+        self.ui.btnDelete.clicked.connect(self.openDeletePopup)
+
         # Radio Buttum → inverter as cores
         self.chkInverteCores.clicked.connect(self.updateAsciiArt)
 
@@ -181,7 +191,9 @@ class MainWindow(QWidget):
 
         # Cria um grupo para controlar a exclusividade entre os botões
         self.alignGroup = QButtonGroup(self)
-        self.alignGroup.setExclusive(True)  # apenas um pode estar marcado ao mesmo tempo
+        self.alignGroup.setExclusive(
+            True
+        )  # apenas um pode estar marcado ao mesmo tempo
 
         # Adiciona os botões ao grupo
         self.alignGroup.addButton(self.btnAlignLeft)
@@ -275,6 +287,10 @@ class MainWindow(QWidget):
         QShortcut(QKeySequence("Ctrl+O"), self.wdgFileSelector).activated.connect(
             self.selectImageFile
         )
+        
+        self.applyShadow(self.wdgFileSelectorInfor)
+        self.applyShadow(self.frmAsciiEditor)
+        self.applyShadow(self.wdgAsciiTools)
 
     # ===================================================================
     # EVENT FILTER – Abrir arquivo
@@ -282,12 +298,10 @@ class MainWindow(QWidget):
     def eventFilter(self, obj, event):
         # --- CLIQUE NO BOTÃO DE ABRIR ARQUIVO ---
         if obj == self.wdgFileSelector:
-            if (
-                event.type() == QEvent.MouseButtonPress
-                and event.button() == Qt.LeftButton
-            ):
-                self.selectImageFile()
-                return True
+            if event.type() == QEvent.MouseButtonPress:
+                if isinstance(event, QMouseEvent) and event.button() == Qt.LeftButton:
+                    self.selectImageFile()
+                    return True
 
         return super().eventFilter(obj, event)
 
@@ -314,7 +328,7 @@ class MainWindow(QWidget):
         # Tamanho em MB
         size_mb = QFileInfo(self.file_path).size() / (1024 * 1024)
         if self.lbl_file_size:
-            self.lbl_file_size.setText(f"{size_mb:.2f} MB")
+            self.lbl_file_size.setText(f"{size_mb:.2f}")
 
         # Carrega a imagem no engine
         self.engine.load_image(self.file_path)
@@ -358,6 +372,11 @@ class MainWindow(QWidget):
         self.engine.reset()
         # Atualiza exibição
         self.updateAsciiArt()
+        
+    def resetAsciiStyle(self):
+        self.sldWidth.setValue(90)
+        self.cmbChars.setCurrentIndex(0)
+        self.chkInverteCores.setChecked(False)
 
     # ===================================================================
     # ATUALIZA O TEXTO DOS QLABELS
@@ -375,7 +394,26 @@ class MainWindow(QWidget):
         # Adiciona o novo texto na label
         label.setText(f"{value}{suffix}")
 
+    # ===================================================================
+    # *Deletar
+    # ===================================================================
     def centralizar_ascii(self):
         options = self.pteAsciiArt.document().defaultTextOption()
         options.setAlignment(Qt.AlignRight)
         self.pteAsciiArt.document().setDefaultTextOption(options)
+
+    def openDeletePopup(self):
+        self.popup = PopupDelete(self)
+        self.popup.confirmed.connect(self.deleteAsciiArt)
+        self.popup.show()
+        
+    def deleteAsciiArt(self):
+        self.pteAsciiArt.clear()
+        self.resetAsciiStyle()
+        
+    def applyShadow(self, widget) -> None:
+        shadow = QGraphicsDropShadowEffect(widget)
+        shadow.setBlurRadius(15)
+        shadow.setOffset(0, 4)
+        shadow.setColor(QColor(0, 0, 0, 15))
+        widget.setGraphicsEffect(shadow)

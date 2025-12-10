@@ -24,25 +24,16 @@ def copyToClipboard(text: str, button: QPushButton) -> bool:
     # Copia para o clipboard
     QApplication.clipboard().setText(text)
 
-    # Feedback visual no botão
-    if button:
-        button.setStyleSheet("""
-    QPushButton {
-        background-color: rgb(28, 28, 28);
-        border: 1px solid rgb(12, 90, 234);
-        border-radius: 4px;
-    }
-""")
-        QTimer.singleShot(
-            200,
-            lambda: button.setStyleSheet("""
-    QPushButton {
-        background-color: rgb(36, 36, 36);
-        border: none;
-        border-radius: 4px;
-    }
-"""),
-        )
+    """
+    ASCII (American Standard Code for Information Interchange) é um padrão de codificação criado na década de 1960 para representar caracteres em computadores e dispositivos eletrônicos.
+    Ele associa números inteiros a letras, números, sinais de pontuação e comandos de controle. Por exemplo:
+    A = 65
+    a = 97
+    1 = 49
+    O conjunto original do ASCII possui 128 caracteres, incluindo letras do alfabeto inglês, números de 0 a 9, símbolos básicos e caracteres de controle (como Enter e Tab). Mais tarde surgiu o Extended ASCII, com até 256 caracteres.
+    O ASCII foi essencial para a comunicação entre sistemas, armazenamento de texto e programação. Embora atualmente o Unicode seja o padrão dominante por suportar milhares de caracteres de diversos idiomas, o ASCII continua sendo a base do Unicode e ainda é amplamente utilizado em sistemas simples e na programação.
+    Além disso, o ASCII também inspirou a criação da ASCII Art, desenhos e textos estilizados feitos apenas com caracteres.
+    """
 
     return True
 
@@ -159,3 +150,4 @@ def setAlignmentAscii(text: QPlainTextEdit, button: QPushButton) -> None:
 
     # Redesenha o conteúdo para aplicar visualmente o novo alinhamento
     text.viewport().update()
+
