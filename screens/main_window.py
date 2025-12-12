@@ -1,3 +1,4 @@
+from typing import Self
 from PySide6.QtWidgets import (
     QWidget,
     QPushButton,
@@ -12,7 +13,8 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QButtonGroup,
     QGraphicsDropShadowEffect,
-    QFrame
+    QFrame,
+    QMainWindow,
 )
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt, QEvent, QFileInfo, Signal
@@ -23,9 +25,18 @@ from core.text_utils import (
     updateWidgetFont,
     setTextColor,
     applyTextStyle,
-    setAlignmentAscii
+    setAlignmentAscii,
 )
-from PySide6.QtGui import QFont, QShortcut, QKeySequence, QMouseEvent, QColor, QIcon, QPixmap, QPainter
+from PySide6.QtGui import (
+    QFont,
+    QShortcut,
+    QKeySequence,
+    QMouseEvent,
+    QColor,
+    QIcon,
+    QPixmap,
+    QPainter,
+)
 from dialogs.popup_delete import PopupDelete
 import sys
 import os
@@ -37,7 +48,15 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import core.resources  # noqa: F401
 
 
-class MainWindow(QWidget):
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -45,15 +64,27 @@ class MainWindow(QWidget):
         # 1. CARREGA A INTERFACE DO ARQUIVO .UI
         # ===============================================================
         loader = QUiLoader()
-        ui_file = QFile("ui/MainWindow2.ui")
+
+        ui_path = resource_path("ui/MainWindow2.ui")
+        ui_file = QFile(ui_path)
+
+        if not ui_file.exists():
+            print("❌ ERRO: UI não encontrada em:", ui_path)
+
         ui_file.open(QFile.ReadOnly)
         self.ui = loader.load(ui_file, self)
         ui_file.close()
 
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.ui)
-        layout.setContentsMargins(0, 0, 0, 0)
-
+        # aplica ui no mainwindow
+        self.setCentralWidget(self.ui)
+        
+        # Ícone
+        icon_path = resource_path("assets/icons/icon.ico")
+        self.setWindowIcon(QIcon(icon_path))
+        
+        #Titulo da janela
+        self.setWindowTitle("Ascyn")
+        
         # ===============================================================
         # 2. ENGINE ASCII
         # ===============================================================
@@ -134,7 +165,7 @@ class MainWindow(QWidget):
             "Orange Fire": "#ff6600",
             "Acid Lime": "#aaff00",
             "Ice Blue": "#00aaff",
-            "Black Classic": "000000",
+            "Black Classic": "#000000",
         }
 
         # ===============================================================
@@ -175,7 +206,8 @@ class MainWindow(QWidget):
                 )
             )
 
-        self.ui.btnDelete.clicked.connect(self.openDeletePopup)
+        if self.btnDelete:
+            self.btnDelete.clicked.connect(self.openDeletePopup)
 
         # Radio Buttum → inverter as cores
         self.chkInverteCores.clicked.connect(self.updateAsciiArt)
@@ -223,6 +255,8 @@ class MainWindow(QWidget):
         # ===============================================================
         # Combox → muda os caracteres da Ascii Art
         self.cmbChars.currentTextChanged.connect(self.updateAsciiArt)
+        self.cmbChars.setCurrentIndex(0)
+
         # ComboBox → muda a família da fonte
         self.cmbFonte.currentFontChanged.connect(
             lambda font: font
@@ -260,8 +294,7 @@ class MainWindow(QWidget):
         # Quando troca a cor → aplicar no texto
         self.cmbTextColor.currentIndexChanged.connect(
             lambda: setTextColor(
-                self.pteAsciiArt,
-                self.cmbTextColor.currentData(Qt.UserRole)
+                self.pteAsciiArt, self.cmbTextColor.currentData(Qt.UserRole)
             )
         )
 
@@ -308,7 +341,7 @@ class MainWindow(QWidget):
         QShortcut(QKeySequence("Ctrl+O"), self.wdgFileSelector).activated.connect(
             self.selectImageFile
         )
-        
+
         self.applyShadow(self.wdgFileSelectorInfor)
         self.applyShadow(self.frmAsciiEditor)
         self.applyShadow(self.wdgAsciiTools)
@@ -393,7 +426,7 @@ class MainWindow(QWidget):
         self.engine.reset()
         # Atualiza exibição
         self.updateAsciiArt()
-        
+
     def resetAsciiStyle(self):
         self.sldWidth.setValue(90)
         self.cmbChars.setCurrentIndex(0)
@@ -419,11 +452,11 @@ class MainWindow(QWidget):
         self.popup = PopupDelete(self)
         self.popup.confirmed.connect(self.deleteAsciiArt)
         self.popup.show()
-        
+
     def deleteAsciiArt(self):
         self.pteAsciiArt.clear()
         self.resetAsciiStyle()
-        
+
     def applyShadow(self, widget) -> None:
         shadow = QGraphicsDropShadowEffect(widget)
         shadow.setBlurRadius(15)

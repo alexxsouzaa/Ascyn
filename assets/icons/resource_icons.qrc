@@ -1,8 +1,6 @@
 <RCC>
   <qresource prefix="/icons">
     <file>img.svg</file>
-    <file>file_icon.svg</file>
-    <file>infor.svg</file>
     <file>delete.svg</file>
     <file>cut.svg</file>
     <file>copy.svg</file>
@@ -12,18 +10,9 @@
     <file>italic.svg</file>
     <file>bold.svg</file>
     <file>export.svg</file>
-    <file>reset.svg</file>
     <file>folder.png</file>
     <file>arrow-down.svg</file>
     <file>arrow-up.svg</file>
-    <file>folder.svg</file>
     <file>ascyn_logo_16x16.svg</file>
-    <file>clip_logo.png</file>
-    <file>close.svg</file>
-    <file>maximize.svg</file>
-    <file>minimize.svg</file>
-  </qresource>
-  <qresource prefix="images">
-    <file>grid.png</file>
   </qresource>
 </RCC>
